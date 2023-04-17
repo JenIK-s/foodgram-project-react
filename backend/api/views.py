@@ -19,6 +19,7 @@ from .serializers import (
 def index(requests):
     return render(requests, 'index.html')
 
+
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-id')
     permission_classes = (IsReadOnly)
