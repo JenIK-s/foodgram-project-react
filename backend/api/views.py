@@ -6,7 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
 
 from .permissions import IsReadOnly
-from ..recipes.models import Recipe, Ingredient, Tag, FavoritesList
+from recipes.models import Recipe, Ingredient, Tag, FavoritesList
 from .serializers import (
     IngredientSerializer,
     RecipeSerializer,
