@@ -32,8 +32,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'retrieve':
             return RecipeDetailSerializer
-        elif self.action in ('create', 'update', 'partial_update'):
-            return RecipeCreateSerializer
         return RecipeSerializer
 
     @action(detail=True, methods=['get'])
