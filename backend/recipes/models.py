@@ -68,7 +68,7 @@ class Recipe(models.Model):
         verbose_name='Тег блюда',
         related_name='related_recipe'
     )
-    time = models.CharField(
+    cooking_time = models.CharField(
         max_length=20,
         verbose_name='Время приготовления'
     )
