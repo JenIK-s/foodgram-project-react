@@ -91,13 +91,23 @@ class RecipeDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
     tags = TagSerializer(many=True, read_only=True)
     ingredients = IngredientSerializer(many=True, read_only=True)
-    is_favorited = serializers.SerializerMethodField()
+    is_favorite = serializers.SerializerMethodField()
     is_in_shopping_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'name', 'image',
-                  'text', 'cooking_time', 'is_favorited', 'is_in_shopping_list')
+        fields = (
+            'id',
+            'tags',
+            'author',
+            'ingredients',
+            'name',
+            'image',
+            'text',
+            'cooking_time',
+            'is_favorite'
+            'is_in_shopping_list'
+        )
 
     def get_is_favorited(self, obj):
         user = self.context['request'].user
@@ -113,12 +123,23 @@ class RecipeDetailSerializer(serializers.ModelSerializer):
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
-    tags = serializers.PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
+    tags = serializers.PrimaryKeyRelatedField(
+        queryset=Tag.objects.all(),
+        many=True
+    )
     ingredients = serializers.JSONField()
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'ingredients', 'name', 'image', 'text', 'cooking_time')
+        fields = (
+            'id',
+            'tags',
+            'ingredients',
+            'name',
+            'image',
+            'text',
+            'cooking_time'
+        )
 
     def create(self, validated_data):
         tags_data = validated_data.pop('tags')
@@ -127,7 +148,12 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         for tag in tags_data:
             recipe.tags.add(tag)
         for ingredient_data in ingredients_data:
-            ingredient = Ingredient.objects.get_or_create(name=ingredient_data['name'],
-                                                          measurement_unit=ingredient_data['measurement_unit'])[0]
-            recipe.ingredients.add(ingredient, through_defaults={'amount': ingredient_data['amount']})
+            ingredient = Ingredient.objects.get_or_create(
+                name=ingredient_data['name'],
+                measurement_unit=ingredient_data['measurement_unit']
+            )[0]
+            recipe.ingredients.add(
+                ingredient,
+                through_defaults={'amount': ingredient_data['amount']}
+            )
         return recipe
