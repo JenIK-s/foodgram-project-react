@@ -1,6 +1,6 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-from .views import (IngredientViewSet, RecipeViewSet, TagViewSet)
+from .views import IngredientViewSet, RecipeViewSet, TagViewSet, index
 
 app_name = 'api'
 
@@ -11,4 +11,5 @@ router.register('recipes', RecipeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('hell/', index)
 ]

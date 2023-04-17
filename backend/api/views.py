@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
+from django.shortcuts import render
 
 from .permissions import IsReadOnly
 from recipes.models import Recipe, Ingredient, Tag, FavoritesList
@@ -14,6 +15,9 @@ from .serializers import (
     TagSerializer
 )
 
+
+def index(requests):
+    return render(requests, 'index.html')
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-id')
