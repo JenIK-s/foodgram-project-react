@@ -10,7 +10,6 @@ from ..recipes.models import Recipe, Ingredient, Tag, FavoritesList
 from .serializers import (
     IngredientSerializer,
     RecipeSerializer,
-    RecipeCreateSerializer,
     RecipeDetailSerializer,
     TagSerializer
 )
