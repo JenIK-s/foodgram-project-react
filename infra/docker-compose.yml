@@ -21,11 +21,9 @@ services:
       - ./.env
 
   frontend:
-    image: jeniks/foodgram_front:latest
+    image: jeniks/foodgram_front:tagname
     volumes:
       - ../frontend/:/app/result_build/
-    depends_on:
-      - db
 
   nginx:
     image: nginx:1.19.3
