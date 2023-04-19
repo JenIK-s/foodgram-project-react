@@ -8,7 +8,7 @@ services:
       - .env
 
   backend:
-    image: jeniks/foodgram:tagname
+    image: jeniks/foodgram:latest
     restart: always
     volumes:
       - static_value:/app/static_backend/
@@ -21,7 +21,7 @@ services:
       - ./.env
 
   frontend:
-    image: jeniks/foodgram_front:tagname
+    image: jeniks/foodgram_front:latest
     volumes:
       - ./:/app/result_build/
 
