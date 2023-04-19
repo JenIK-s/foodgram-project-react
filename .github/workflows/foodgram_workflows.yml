@@ -49,7 +49,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: jeniks/foodgram:tagname
+            tags: jeniks/foodgram:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -63,7 +63,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull jeniks/foodgram:tagname
+            sudo docker pull jeniks/foodgram:latest
             sudo docker-compose stop
             sudo docker-compose rm web
             touch .env
