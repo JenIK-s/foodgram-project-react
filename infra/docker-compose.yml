@@ -23,7 +23,7 @@ services:
   frontend:
     image: jeniks/foodgram_front:tagname
     volumes:
-      - ../frontend/:/app/result_build/
+      - ./:/app/result_build/
 
   nginx:
     image: nginx:1.19.3
@@ -31,7 +31,7 @@ services:
       - "80:80"
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - ../frontend/build:/usr/share/nginx/html/
+      - ./build:/usr/share/nginx/html/
       - ../docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
