@@ -45,7 +45,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: jenikss/foodgram_backend:latest
+            tags: jeniks/foodgram_backend:latest
 
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
@@ -67,7 +67,7 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: jenikss/foodgram_frontend:latest
+          tags: jeniks/foodgram_frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -83,8 +83,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull jenikss/foodgram_backend:latest
-            sudo docker pull jenikss/foodgram_frontend:latest
+            sudo docker pull jeniks/foodgram_backend:latest
+            sudo docker pull jeniks/foodgram_frontend:latest
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker-compose pull backend
