@@ -1,8 +1,8 @@
 Django==2.2.16
 psycopg2-binary
 djangorestframework==3.12.4
-Pillow==8.3.1
-django_filters
+
+django-filter==21.1
 
 
 asgiref==3.2.10

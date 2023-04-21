@@ -45,7 +45,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: jeniks/foodgram_backend:latest
+            tags: jeniks/backend:v1
 
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
@@ -67,7 +67,7 @@ jobs:
         with:
           context: ./frontend
           push: true
-          tags: jeniks/foodgram_frontend:latest
+          tags: jeniks/frontend:v1
 
   deploy:
     runs-on: ubuntu-latest
