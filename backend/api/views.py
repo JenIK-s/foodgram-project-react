@@ -4,9 +4,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import models
-from django.shortcuts import render
+from django.contrib.auth import get_user_model
 
-from .permissions import IsReadOnly
+from .permissions import IsReadOnly, IsAuthenticated
 from recipes.models import Recipe, Ingredient, Tag, FavoritesList
 from .serializers import (
     IngredientSerializer,
@@ -16,8 +16,25 @@ from .serializers import (
 )
 
 
-def index(requests):
-    return render(requests, 'index.html')
+from .serializers import UserSerializer
+
+User = get_user_model()
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint for managing users.
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['get'])
+    def me(self, request):
+        """
+        Returns information about the authenticated user.
+        """
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
