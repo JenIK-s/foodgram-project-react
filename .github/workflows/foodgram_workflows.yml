@@ -45,7 +45,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: jeniks/backend:v1.1.5
+            tags: jeniks/backend:v1.1.6
 
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
@@ -91,7 +91,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker pull jeniks/backend:v1.1.5
+            sudo docker pull jeniks/backend:v1.1.6
             sudo docker pull jeniks/frontend:v1
             sudo docker-compose stop
             sudo docker-compose rm backend
@@ -99,9 +99,6 @@ jobs:
             sudo docker-compose rm frontend
             sudo docker-compose pull frontend
             sudo docker-compose up -d
-            docker exec -it jadmi_backend_1 bash
-            python manage.py migrate
-            python manage.py collectstatic --no-input
 
   send_message:
     runs-on: ubuntu-latest
