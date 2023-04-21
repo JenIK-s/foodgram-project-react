@@ -7,7 +7,7 @@ from django.db import models
 from django.contrib.auth import get_user_model
 
 from .permissions import IsReadOnly, IsAuthenticated
-from recipes.models import Recipe, Ingredient, Tag, FavoritesList
+from ..recipes.models import Recipe, Ingredient, Tag, FavoritesList
 from .serializers import (
     IngredientSerializer,
     RecipeSerializer,

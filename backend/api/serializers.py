@@ -1,7 +1,16 @@
 from rest_framework import serializers
 
-from users.models import User, Follow
-from recipes.models import Ingredient, Recipe, Tag
+from ..users.models import User, Follow
+from ..recipes.models import Ingredient, Recipe, Tag
+
+class CreateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = tuple(User.REQUIRED_FIELDS) + (
+            User.USERNAME_FIELD,
+            'password',
+        )
+
 
 
 class UserSerializer(serializers.ModelSerializer):
