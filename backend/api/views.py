@@ -20,6 +20,7 @@ from .serializers import UserSerializer
 
 User = get_user_model()
 
+
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint for managing users.

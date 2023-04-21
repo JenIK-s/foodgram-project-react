@@ -11,7 +11,6 @@ class IsReadOnly(permissions.BasePermission):
                 or obj.author == request.user)
 
 
-
 class IsAuthenticated(BasePermission):
     """
     Allows access only to authenticated users.
