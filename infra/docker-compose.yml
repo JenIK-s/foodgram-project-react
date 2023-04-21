@@ -13,11 +13,11 @@ services:
       - ./.env
 
   backend:
-    image: jeniks/backend:v1.1.4
+    image: jeniks/backend:v1.1.5
     restart: always
     volumes:
-      - static_volume:/app/static/
-      - media_volume:/app/media/
+      - static_volume:/app/backend/static/
+      - media_volume:/app/backend/media/
     ports:
      - "8000:8000"
     depends_on:
