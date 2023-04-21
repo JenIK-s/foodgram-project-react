@@ -45,7 +45,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: jeniks/backend:v1
+            tags: jeniks/backend:v1.1
 
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
@@ -91,7 +91,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker pull jeniks/backend:v1
+            sudo docker pull jeniks/backend:v1.1
             sudo docker pull jeniks/frontend:v1
             sudo docker-compose stop
             sudo docker-compose rm backend
