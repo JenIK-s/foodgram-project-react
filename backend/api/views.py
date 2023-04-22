@@ -3,6 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.permissions import DjangoModelPermissions
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -26,7 +27,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [IsAuthenticated, ]
+    permission_classes = [DjangoModelPermissions, ]
 
     @action(detail=False, methods=['get'])
     def me(self, request):
