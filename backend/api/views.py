@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, ]
 
     @action(detail=False, methods=['get'])
     def me(self, request):
@@ -39,7 +39,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-id')
-    permission_classes = (IsReadOnly)
+    permission_classes = [IsReadOnly, ]
     filter_backends = [DjangoFilterBackend]
     filterset_fields = [
         'author',
