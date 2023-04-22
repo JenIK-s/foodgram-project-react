@@ -44,8 +44,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filterset_fields = [
         'author',
         'tags',
-        'is_favorited',
-        'is_in_shopping_list'
     ]
     search_fields = ['name', 'tags__name']
     lookup_field = 'id'
