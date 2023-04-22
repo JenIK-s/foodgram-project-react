@@ -9,14 +9,13 @@ from django.contrib.auth import get_user_model
 from .permissions import IsReadOnly, IsAuthenticated
 from recipes.models import Recipe, Ingredient, Tag, FavoritesList
 from .serializers import (
+    CustomUserSerializer,
     IngredientSerializer,
     RecipeSerializer,
     RecipeDetailSerializer,
     TagSerializer
 )
 
-
-from .serializers import UserSerializer
 
 User = get_user_model()
 
@@ -26,7 +25,7 @@ class UserViewSet(viewsets.ModelViewSet):
     API endpoint for managing users.
     """
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])

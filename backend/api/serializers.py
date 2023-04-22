@@ -1,19 +1,25 @@
+from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
 from users.models import User, Follow
 from recipes.models import Ingredient, Recipe, Tag
 
-class CreateUserSerializer(serializers.ModelSerializer):
+class CreateUserSerializer(UserCreateSerializer):
+    """ Сериализатор создания пользователя. """
+
     class Meta:
         model = User
-        fields = tuple(User.REQUIRED_FIELDS) + (
-            User.USERNAME_FIELD,
-            'password',
-        )
+        fields = [
+            'email',
+            'username',
+            'first_name',
+            'last_name',
+            'password'
+        ]
 
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(UserSerializer):
     class Meta:
         model = User
         fields = (
