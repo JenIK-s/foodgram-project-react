@@ -69,7 +69,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 class SimpleTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('id', 'name', 'color')
+        fields = ('id', 'title', 'color_key')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -80,7 +80,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tags', 'author', 'title', 'img', 'description',
+        fields = ('id', 'tag', 'author', 'title', 'img', 'description',
                   'cooking_time',)
 
     # def get_is_favorited(self, obj):
