@@ -44,7 +44,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = [
         'author',
-        'tags',
+        'tag',
     ]
     search_fields = ['name', 'tags__name']
     lookup_field = 'id'
@@ -62,9 +62,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'])
-    def tags(self, request):
-        tags = Tag.objects.all()
-        serializer = TagSerializer(tags, many=True)
+    def tag(self, request):
+        tag = Tag.objects.all()
+        serializer = TagSerializer(tag, many=True)
         return Response(serializer.data)
 
     def perform_create(self, serializer):

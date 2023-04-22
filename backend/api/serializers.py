@@ -69,18 +69,18 @@ class IngredientSerializer(serializers.ModelSerializer):
 class SimpleTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('id', 'title', 'color_key')
+        fields = ('title', 'color_key')
 
 
 class RecipeSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
-    tags = SimpleTagSerializer(many=True, read_only=True)
+    tag = SimpleTagSerializer(many=True, read_only=True)
     # is_favorited = serializers.SerializerMethodField()
     # is_in_shopping_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = ('id', 'tag', 'author', 'title', 'img', 'description',
+        fields = ('tag', 'author', 'title', 'img', 'description',
                   'cooking_time',)
 
     # def get_is_favorited(self, obj):
@@ -104,7 +104,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class RecipeDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
-    tags = TagSerializer(many=True, read_only=True)
+    tag = TagSerializer(many=True, read_only=True)
     ingredients = IngredientSerializer(many=True, read_only=True)
     # is_favorite = serializers.SerializerMethodField()
     # is_in_shopping_list = serializers.SerializerMethodField()
