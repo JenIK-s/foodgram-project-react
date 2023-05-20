@@ -27,7 +27,7 @@ class UserViewSet(viewsets.ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    permission_classes = [DjangoModelPermissions, ]
+    #permission_classes = [DjangoModelPermissions, ]
 
     @action(detail=False, methods=['get'])
     def me(self, request):

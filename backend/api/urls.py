@@ -12,5 +12,6 @@ router.register('users', UserViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    #path('auth/', include('django.contrib.auth.urls'))
     path('auth/', include('djoser.urls.authtoken'))
 ]
