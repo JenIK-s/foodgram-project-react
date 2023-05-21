@@ -18,24 +18,43 @@ from .serializers import (
 )
 
 
+from users.models import User
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from djoser.views import UserViewSet
+
+
 User = get_user_model()
 
-
-class UserViewSet(viewsets.ModelViewSet):
-    """
-    API endpoint for managing users.
-    """
+User = User()
+class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
-    #permission_classes = [DjangoModelPermissions, ]
 
-    @action(detail=False, methods=['get'])
-    def me(self, request):
-        """
-        Returns information about the authenticated user.
-        """
-        serializer = self.get_serializer(request.user)
-        return Response(serializer.data)
+    def get_permissions(self):
+        if self.action == 'create':
+            permission_classes = [IsAuthenticated]
+        elif self.action == 'actioned':
+            permission_classes = [IsAuthenticated]
+        else:
+            permission_classes = [AllowAny]
+        return [permission() for permission in permission_classes]
+
+
+# class UserViewSet(viewsets.ModelViewSet):
+#     """
+#     API endpoint for managing users.
+#     """
+#     queryset = User.objects.all()
+#     serializer_class = CustomUserSerializer
+#     permission_classes = [DjangoModelPermissions, ]
+
+#     @action(detail=False, methods=['get'])
+#     def me(self, request):
+#         """
+#         Returns information about the authenticated user.
+#         """
+#         serializer = self.get_serializer(request.user)
+#         return Response(serializer.data)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
