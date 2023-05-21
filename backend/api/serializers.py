@@ -6,6 +6,28 @@ from recipes.models import Ingredient, Recipe, Tag
 
 
 
+class CommonSubscribed(metaclass=serializers.SerializerMetaclass):
+    """
+    Класс для опредения подписки пользователя на автора.
+    """
+    is_subscribed = serializers.SerializerMethodField()
+
+    def get_is_subscribed(self, obj):
+        """
+        Метод обработки параметра is_subscribed подписок.
+        """
+        request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
+        if Follow.objects.filter(
+                user=request.user, following__id=obj.id).exists():
+            return True
+        else:
+            return False
+
+
+
+
 class RegistrationSerializer(UserCreateSerializer, CommonSubscribed):
     """
     Создание сериализатора модели пользователя.
