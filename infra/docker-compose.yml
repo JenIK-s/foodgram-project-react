@@ -13,7 +13,7 @@ services:
       - ./.env
 
   backend:
-    image: jeniks/backend:v1.1.19
+    image: jeniks/backend:v1.1.20
     restart: always
     volumes:
       - static_volume:/app/backend/static/
