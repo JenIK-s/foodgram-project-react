@@ -36,7 +36,9 @@ class Follow(models.Model):
         on_delete=models.CASCADE,
         related_name='following',
         verbose_name='Автор',
-        help_text='Выберите автора, на которого подписываются'
+        help_text='Выберите автора, на которого подписываются',
+        blank=True,
+        null=True
     )
     # user = models.ForeignKey(
     #     User,
