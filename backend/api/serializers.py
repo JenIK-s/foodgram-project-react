@@ -4,6 +4,37 @@ from rest_framework import serializers
 from users.models import User, Follow
 from recipes.models import Ingredient, Recipe, Tag
 
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    is_subscribed = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'email',
+            'is_subscribed',
+            'username',
+            'first_name',
+            'last_name',
+            'password'
+        )
+        extra_kwargs = {"password": {'write_only': True}}
+
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if request is None or request.user.is_anonymous:
+            return False
+        user = request.user
+        return Follow.objects.filter(following=obj, user=user).exists()
+
+
+
+
+
+
+
+
 class CreateUserSerializer(UserCreateSerializer):
     """ Сериализатор создания пользователя. """
 

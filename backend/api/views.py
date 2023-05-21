@@ -14,30 +14,35 @@ from .serializers import (
     IngredientSerializer,
     RecipeSerializer,
     RecipeDetailSerializer,
-    TagSerializer
+    TagSerializer,
+
+
+
+
+
+    CurrentUserSerializer
+)
+from rest_framework.permissions import (
+    AllowAny, IsAuthenticated
 )
 
-
-from users.models import CustomUser
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from djoser.views import UserViewSet
+User = get_user_model()
 
 
-#User = get_user_model()
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = CurrentUserSerializer
+    permission_classes = [AllowAny, ]
 
-User = CustomUser()
-class CustomUserViewSet(UserViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+    @action(
+        detail=False,
+        methods=['get'],
+        permission_classes=(IsAuthenticated, )
+    )
+    def me(self, request):
+        serializer = self.get_serializer(self.request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    def get_permissions(self):
-        if self.action == 'create':
-            permission_classes = [IsAuthenticated]
-        elif self.action == 'actioned':
-            permission_classes = [IsAuthenticated]
-        else:
-            permission_classes = [AllowAny]
-        return [permission() for permission in permission_classes]
 
 
 # class UserViewSet(viewsets.ModelViewSet):
