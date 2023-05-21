@@ -20,27 +20,41 @@ from .serializers import (
 
 
 
-    CurrentUserSerializer
+    CurrentUserSerializer,
+    RegistrationSerializer
 )
 from rest_framework.permissions import (
     AllowAny, IsAuthenticated
 )
 
+
+
+from djoser.views import UserViewSet
+
 User = get_user_model()
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = CurrentUserSerializer
-    permission_classes = [AllowAny, ]
+class CreateUserView(UserViewSet):
+    """
+    Вьюсет обработки моделей пользователя.
+    """
+    serializer_class = RegistrationSerializer
 
-    @action(
-        detail=False,
-        methods=['get']
-    )
-    def me(self, request):
-        serializer = self.get_serializer(request.user)
-        return Response(serializer.data)
+    def get_queryset(self):
+        return User.objects.all()
+    
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = CurrentUserSerializer
+#     permission_classes = [AllowAny, ]
+
+#     @action(
+#         detail=False,
+#         methods=['get']
+#     )
+#     def me(self, request):
+#         serializer = self.get_serializer(request.user)
+#         return Response(serializer.data)
 
 
 

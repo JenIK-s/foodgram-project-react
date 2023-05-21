@@ -5,6 +5,32 @@ from users.models import User, Follow
 from recipes.models import Ingredient, Recipe, Tag
 
 
+
+class RegistrationSerializer(UserCreateSerializer, CommonSubscribed):
+    """
+    Создание сериализатора модели пользователя.
+    """
+    class Meta:
+        """
+        Мета параметры сериализатора модели пользователя.
+        """
+        model = User
+        fields = ('id', 'username', 'email', 'first_name',
+                  'last_name', 'is_subscribed', 'password')
+        write_only_fields = ('password',)
+        read_only_fields = ('id',)
+        extra_kwargs = {'is_subscribed': {'required': False}}
+
+    def to_representation(self, obj):
+        """
+        Метод представления результатов сериализатора.
+        """
+        result = super(RegistrationSerializer, self).to_representation(obj)
+        result.pop('password', None)
+        return result
+
+
+
 class CurrentUserSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
 
