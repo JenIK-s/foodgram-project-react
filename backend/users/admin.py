@@ -22,4 +22,4 @@ class FollowAdmin(admin.ModelAdmin):
         'user',
         'following',
     )
-    list_filter = ('user', 'author',)
+    list_filter = ('user', 'following',)
