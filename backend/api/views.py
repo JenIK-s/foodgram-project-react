@@ -18,14 +18,14 @@ from .serializers import (
 )
 
 
-from users.models import User
+from users.models import CustomUser
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from djoser.views import UserViewSet
 
 
-User = get_user_model()
+#User = get_user_model()
 
-User = User()
+User = CustomUser()
 class CustomUserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
