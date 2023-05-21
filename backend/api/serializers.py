@@ -21,12 +21,12 @@ class CurrentUserSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {"password": {'write_only': True}}
 
-    def get_is_subscribed(self, obj):
-        request = self.context.get('request')
-        if request is None or request.user.is_anonymous:
-            return False
-        user = request.user
-        return Follow.objects.filter(following=obj, user=user).exists()
+    # def get_is_subscribed(self, obj):
+    #     request = self.context.get('request')
+    #     if request is None or request.user.is_anonymous:
+    #         return False
+    #     user = request.user
+    #     return Follow.objects.filter(following=obj, user=user).exists()
 
 
 

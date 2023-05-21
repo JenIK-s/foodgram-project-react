@@ -36,30 +36,26 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=['get'],
-        permission_classes=(IsAuthenticated, )
+        methods=['get']
     )
     def me(self, request):
-        serializer = self.get_serializer(self.request.user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
 
 
 
 # class UserViewSet(viewsets.ModelViewSet):
-#     """
-#     API endpoint for managing users.
-#     """
 #     queryset = User.objects.all()
 #     serializer_class = CustomUserSerializer
 #     permission_classes = [DjangoModelPermissions, ]
 
-#     @action(detail=False, methods=['get'])
-#     def me(self, request):
-#         """
-#         Returns information about the authenticated user.
-#         """
-#         serializer = self.get_serializer(request.user)
-#         return Response(serializer.data)
+    # @action(
+    #     detail=False,
+    #     methods=['get']
+    # )
+    # def me(self, request):
+    #     serializer = self.get_serializer(request.user)
+    #     return Response(serializer.data)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
