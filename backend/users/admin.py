@@ -20,6 +20,6 @@ class FollowAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
         'user',
-        'author',
+        'following',
     )
     list_filter = ('user', 'author',)
