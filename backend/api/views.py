@@ -27,7 +27,7 @@ from djoser.views import UserViewSet
 
 User = CustomUser()
 class CustomUserViewSet(UserViewSet):
-    queryset = User.objects.all()
+    queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
 
     def get_permissions(self):
