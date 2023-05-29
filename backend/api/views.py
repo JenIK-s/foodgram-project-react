@@ -38,6 +38,7 @@ User = get_user_model()
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = CurrentUserSerializer
+    search_fields = ('username', 'email')
     permission_classes = [AllowAny, ]
 
     @action(
