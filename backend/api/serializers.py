@@ -4,9 +4,14 @@ from rest_framework import serializers
 from users.models import User, Follow
 from recipes.models import Ingredient, Recipe, Tag
 
+class CreateUserSerializer(UserCreateSerializer):
+    class Meta:
+        model = User
+        fields = ('email', 'password', 'username', 'first_name', 'last_name',)
+        extra_kwargs = {'password': {'write_only': True}}
 
 
-class CurrentUserSerializer(serializers.ModelSerializer):
+class CurrentUserSerializer(UserSerializer):
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
@@ -20,7 +25,6 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             'last_name',
             'password'
         )
-        extra_kwargs = {"password": {'write_only': True}}
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
