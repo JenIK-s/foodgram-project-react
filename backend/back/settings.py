@@ -124,20 +124,37 @@ REST_FRAMEWORK = {
     ['rest_framework.permissions.IsAuthenticatedOrReadOnly', ],
 }
 
+# DJOSER = {
+#     'LOGIN_FIELD': 'email',
+#     'HIDE_USERS': False,
+#     'PERMISSIONS': {
+#         'resipe': ('api.permissions.AuthorStaffOrReadOnly,',),
+#         'recipe_list': ('api.permissions.AuthorStaffOrReadOnly',),
+#         'user': ('api.permissions.OwnerUserOrReadOnly',),
+#         'user_list': ('api.permissions.OwnerUserOrReadOnly',),
+#     },
+#     'SERIALIZERS': {
+#         'user': 'api.serializers.UserSerializer',
+#         'user_list': 'api.serializers.UserSerializer',
+#         'current_user': 'api.serializers.CurrentUserSerializer',
+#         'user_create': 'api.serializers.UserSerializer',
+#     },
+# }
+
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
-    'PERMISSIONS': {
-        'resipe': ('api.permissions.AuthorStaffOrReadOnly,',),
-        'recipe_list': ('api.permissions.AuthorStaffOrReadOnly',),
-        'user': ('api.permissions.OwnerUserOrReadOnly',),
-        'user_list': ('api.permissions.OwnerUserOrReadOnly',),
-    },
+    'SEND_ACTIVATION_EMAIL': False,
+
     'SERIALIZERS': {
-        'user': 'api.serializers.UserSerializer',
-        'user_list': 'api.serializers.UserSerializer',
-        'current_user': 'api.serializers.UserSerializer',
-        'user_create': 'api.serializers.UserSerializer',
+        'user_create': 'api.serializers.CurrentUserSerializer',
+        'current_user': 'api.serializers.CurrentUserSerializer',
+        'user': 'api.serializers.CurrentUserSerializer',
+    },
+    'PERMISSIONS': {
+        'user': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
+        'user_list': ('rest_framework.permissions.AllowAny',),
+        'token_create': ['rest_framework.permissions.AllowAny'],
     },
 }
 
