@@ -45,7 +45,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: jeniks/backend:v1.1.32
+            tags: jeniks/backend:v1.1.33
 
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
