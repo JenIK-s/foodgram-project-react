@@ -10,7 +10,7 @@ from django.contrib.auth import get_user_model
 from .permissions import IsReadOnly, IsAuthenticated
 from recipes.models import Recipe, Ingredient, Tag, FavoritesList
 from .serializers import (
-    CustomUserSerializer,
+    # CustomUserSerializer,
     IngredientSerializer,
     RecipeSerializer,
     RecipeDetailSerializer,
@@ -21,7 +21,7 @@ from .serializers import (
 
 
     CurrentUserSerializer,
-    RegistrationSerializer
+    # RegistrationSerializer
 )
 from rest_framework.permissions import (
     AllowAny, IsAuthenticated
