@@ -34,27 +34,19 @@ from djoser.views import UserViewSet
 User = get_user_model()
 
 
-class CreateUserView(UserViewSet):
-    """
-    Вьюсет обработки моделей пользователя.
-    """
-    serializer_class = RegistrationSerializer
-
-    def get_queryset(self):
-        return User.objects.all()
     
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = CurrentUserSerializer
-#     permission_classes = [AllowAny, ]
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = CurrentUserSerializer
+    permission_classes = [AllowAny, ]
 
-#     @action(
-#         detail=False,
-#         methods=['get']
-#     )
-#     def me(self, request):
-#         serializer = self.get_serializer(request.user)
-#         return Response(serializer.data)
+    @action(
+        detail=False,
+        methods=['get']
+    )
+    def me(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)
 
 
 

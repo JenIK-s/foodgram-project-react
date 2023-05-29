@@ -6,53 +6,6 @@ from recipes.models import Ingredient, Recipe, Tag
 
 
 
-class CommonSubscribed(metaclass=serializers.SerializerMetaclass):
-    """
-    Класс для опредения подписки пользователя на автора.
-    """
-    is_subscribed = serializers.SerializerMethodField()
-
-    def get_is_subscribed(self, obj):
-        """
-        Метод обработки параметра is_subscribed подписок.
-        """
-        request = self.context.get('request')
-        if request.user.is_anonymous:
-            return False
-        if Follow.objects.filter(
-                user=request.user, following__id=obj.id).exists():
-            return True
-        else:
-            return False
-
-
-
-
-class RegistrationSerializer(UserCreateSerializer, CommonSubscribed):
-    """
-    Создание сериализатора модели пользователя.
-    """
-    class Meta:
-        """
-        Мета параметры сериализатора модели пользователя.
-        """
-        model = User
-        fields = ('id', 'username', 'email', 'first_name',
-                  'last_name', 'is_subscribed', 'password')
-        write_only_fields = ('password',)
-        read_only_fields = ('id',)
-        extra_kwargs = {'is_subscribed': {'required': False}}
-
-    def to_representation(self, obj):
-        """
-        Метод представления результатов сериализатора.
-        """
-        result = super(RegistrationSerializer, self).to_representation(obj)
-        result.pop('password', None)
-        return result
-
-
-
 class CurrentUserSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
 
@@ -69,44 +22,37 @@ class CurrentUserSerializer(serializers.ModelSerializer):
         )
         extra_kwargs = {"password": {'write_only': True}}
 
-    # def get_is_subscribed(self, obj):
-    #     request = self.context.get('request')
-    #     if request is None or request.user.is_anonymous:
-    #         return False
-    #     user = request.user
-    #     return Follow.objects.filter(following=obj, user=user).exists()
+    def get_is_subscribed(self, obj):
+        request = self.context.get('request')
+        if request is None or request.user.is_anonymous:
+            return False
+        user = request.user
+        return Follow.objects.filter(following=obj, user=user).exists()
+    
+# class CreateUserSerializer(UserCreateSerializer):
+#     """ Сериализатор создания пользователя. """
+
+#     class Meta:
+#         model = User
+#         fields = [
+#             'email',
+#             'username',
+#             'first_name',
+#             'last_name',
+#             'password'
+#         ]
 
 
 
-
-
-
-
-
-class CreateUserSerializer(UserCreateSerializer):
-    """ Сериализатор создания пользователя. """
-
-    class Meta:
-        model = User
-        fields = [
-            'email',
-            'username',
-            'first_name',
-            'last_name',
-            'password'
-        ]
-
-
-
-class CustomUserSerializer(UserSerializer):
-    class Meta:
-        model = User
-        fields = (
-            'username',
-            'email',
-            'first_name',
-            'last_name'
-        )
+# class CustomUserSerializer(UserSerializer):
+#     class Meta:
+#         model = User
+#         fields = (
+#             'username',
+#             'email',
+#             'first_name',
+#             'last_name'
+#         )
 
 
 class FollowSerializer(serializers.ModelSerializer):
