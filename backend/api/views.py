@@ -31,11 +31,12 @@ from rest_framework.permissions import (
 
 from djoser.views import UserViewSet
 
+
 User = get_user_model()
 
 
     
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CurrentUserSerializer
     search_fields = ('username', 'email')

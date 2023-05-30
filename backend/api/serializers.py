@@ -23,6 +23,7 @@ class CurrentUserSerializer(UserSerializer):
             'username',
             'first_name',
             'last_name',
+            'password'
         )
 
     def get_is_subscribed(self, obj):
