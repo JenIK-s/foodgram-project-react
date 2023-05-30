@@ -154,10 +154,6 @@ REST_FRAMEWORK = {
     'UPLOADED_FILES_USE_URL': False,
 }
 
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-]
-CORS_URLS_REGEX = r'^/api/.*$'
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
