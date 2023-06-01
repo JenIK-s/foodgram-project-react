@@ -3,31 +3,21 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.permissions import DjangoModelPermissions
 from django.db import models
 from django.contrib.auth import get_user_model
 
-from .permissions import IsReadOnly, IsAuthenticated
+from .permissions import IsReadOnly
 from recipes.models import Recipe, Ingredient, Tag, FavoritesList
 from .serializers import (
-    # CustomUserSerializer,
     IngredientSerializer,
     RecipeSerializer,
     RecipeDetailSerializer,
     TagSerializer,
-
-
-
-
-
     CurrentUserSerializer,
-    # RegistrationSerializer
 )
 from rest_framework.permissions import (
-    AllowAny, IsAuthenticated
+    AllowAny
 )
-
-
 
 from djoser.views import UserViewSet
 
@@ -41,29 +31,6 @@ class UserViewSet(UserViewSet):
     serializer_class = CurrentUserSerializer
     search_fields = ('username', 'email')
     permission_classes = [AllowAny, ]
-
-    @action(
-        detail=False,
-        methods=['get']
-    )
-    def me(self, request):
-        serializer = self.get_serializer(request.user)
-        return Response(serializer.data)
-
-
-
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = CustomUserSerializer
-#     permission_classes = [DjangoModelPermissions, ]
-
-    # @action(
-    #     detail=False,
-    #     methods=['get']
-    # )
-    # def me(self, request):
-    #     serializer = self.get_serializer(request.user)
-    #     return Response(serializer.data)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
