@@ -31,7 +31,7 @@ class CurrentUserSerializer(UserSerializer):
         if request is None or request.user.is_anonymous:
             return False
         user = request.user
-        return Follow.objects.filter(following=obj, user=user).exists()
+        return Follow.objects.filter(following=obj, author=user).exists()
     
 # class CreateUserSerializer(UserCreateSerializer):
 #     """ Сериализатор создания пользователя. """
