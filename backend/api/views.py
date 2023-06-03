@@ -33,16 +33,25 @@ class UserViewSet(UserViewSet):
     permission_classes = [AllowAny, ]
 
 
+
+from .permissions import IsAuthorAdminOrReadOnly
+
+from .serializers import RecipeListSerializer
+
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-id')
-    permission_classes = [IsReadOnly, ]
+
+    serializer_class = RecipeListSerializer
+    permission_classes = [IsAuthorAdminOrReadOnly, ]
+
+
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = [
-        'author',
-        'tag',
-    ]
-    search_fields = ['name', 'tags__name']
-    lookup_field = 'id'
+    # filterset_fields = [
+    #     'author',
+    #     'tag',
+    # ]
+    # search_fields = ['name', 'tags__name']
+    # lookup_field = 'id'
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

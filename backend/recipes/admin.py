@@ -16,6 +16,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'pk',
         'author',
         'title',
+        'ingredients',
         'tag',
         'count_ingredient'
     )
