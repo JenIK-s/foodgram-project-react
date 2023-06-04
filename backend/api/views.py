@@ -25,12 +25,18 @@ from djoser.views import UserViewSet
 User = get_user_model()
 
 
+
+from rest_framework.permissions import IsAuthenticated 
+
+
     
 class UserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CurrentUserSerializer
     search_fields = ('username', 'email')
-    permission_classes = [AllowAny, ]
+    permission_classes = (IsAuthenticated,) 
+    # permission_classes = [AllowAny, ]
+    
 
 
 
