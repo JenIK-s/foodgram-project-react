@@ -42,19 +42,17 @@ class UserViewSet(UserViewSet):
 
 from .permissions import IsAuthorAdminOrReadOnly
 
-from .serializers import RecipeListSerializer
+# from .serializers import RecipeListSerializer
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all().order_by('-id')
-
-    serializer_class = RecipeListSerializer
-    permission_classes = [IsAuthorAdminOrReadOnly, ]
-
-
+    permission_classes = (IsReadOnly)
     filter_backends = [DjangoFilterBackend]
     filterset_fields = [
         'author',
-        'tag',
+        'tags',
+        'is_favorited',
+        'is_in_shopping_list'
     ]
     search_fields = ['name', 'tags__name']
     lookup_field = 'id'
@@ -72,9 +70,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @action(detail=False, methods=['get'])
-    def tag(self, request):
-        tag = Tag.objects.all()
-        serializer = TagSerializer(tag, many=True)
+    def tags(self, request):
+        tags = Tag.objects.all()
+        serializer = TagSerializer(tags, many=True)
         return Response(serializer.data)
 
     def perform_create(self, serializer):

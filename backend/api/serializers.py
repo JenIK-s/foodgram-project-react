@@ -78,35 +78,35 @@ class SimpleTagSerializer(serializers.ModelSerializer):
 
 
 
-from recipes.models import IngredientInRecipe
+# from recipes.models import IngredientInRecipe
 
 
-class IngredientRecipeListSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source='ingredient.id')
-    name = serializers.CharField(source='ingredient.name')
-    measurement_unit = serializers.CharField(
-        source='ingredient.measurement_unit'
-    )
+# class IngredientRecipeListSerializer(serializers.ModelSerializer):
+#     id = serializers.IntegerField(source='ingredient.id')
+#     name = serializers.CharField(source='ingredient.name')
+#     measurement_unit = serializers.CharField(
+#         source='ingredient.measurement_unit'
+#     )
 
-    class Meta:
-        model = IngredientInRecipe
-        fields = ('id', 'name', 'measurement_unit', 'amount', )
+#     class Meta:
+#         model = IngredientInRecipe
+#         fields = ('id', 'name', 'measurement_unit', 'amount', )
 
-class RecipeListSerializer(serializers.ModelSerializer):
-    tags = SimpleTagSerializer(many=True)
-    author = CurrentUserSerializer()
-    ingredients = IngredientRecipeListSerializer(
-        many=True,
-        source='ingredient_recipe'
-    )
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
+# class RecipeListSerializer(serializers.ModelSerializer):
+#     tags = SimpleTagSerializer(many=True)
+#     author = CurrentUserSerializer()
+#     ingredients = IngredientRecipeListSerializer(
+#         many=True,
+#         source='ingredient_recipe'
+#     )
+#     is_favorited = serializers.SerializerMethodField()
+#     is_in_shopping_cart = serializers.SerializerMethodField()
 
-    class Meta:
-        model = Recipe
-        fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
-                  'is_in_shopping_cart', 'name', 'image', 'text',
-                  'cooking_time')
+#     class Meta:
+#         model = Recipe
+#         fields = ('id', 'tags', 'author', 'ingredients', 'is_favorited',
+#                   'is_in_shopping_cart', 'name', 'image', 'text',
+#                   'cooking_time')
 
 
 
