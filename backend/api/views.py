@@ -34,8 +34,8 @@ class UserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CurrentUserSerializer
     search_fields = ('username', 'email')
-    permission_classes = (IsAuthenticated,) 
-    # permission_classes = [AllowAny, ]
+    
+    permission_classes = [AllowAny, ]
     
 
 
@@ -52,12 +52,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
 
     filter_backends = [DjangoFilterBackend]
-    # filterset_fields = [
-    #     'author',
-    #     'tag',
-    # ]
-    # search_fields = ['name', 'tags__name']
-    # lookup_field = 'id'
+    filterset_fields = [
+        'author',
+        'tag',
+    ]
+    search_fields = ['name', 'tags__name']
+    lookup_field = 'id'
 
     def get_serializer_class(self):
         if self.action == 'retrieve':

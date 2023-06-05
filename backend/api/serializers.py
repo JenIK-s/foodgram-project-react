@@ -119,25 +119,25 @@ class RecipeListSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
     tag = SimpleTagSerializer(many=True, read_only=True)
-    # is_favorited = serializers.SerializerMethodField()
-    # is_in_shopping_list = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
         fields = ('tag', 'author', 'title', 'img', 'description',
                   'cooking_time',)
 
-    # def get_is_favorited(self, obj):
-    #     user = self.context['request'].user
-    #     if user.is_authenticated:
-    #         return obj.favorite_recipes.filter(user=user).exists()
-    #     return False
-    #
-    # def get_is_in_shopping_cart(self, obj):
-    #     user = self.context['request'].user
-    #     if user.is_authenticated:
-    #         return obj.shopping_cart_recipes.filter(user=user).exists()
-    #     return False
+    def get_is_favorited(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return obj.favorite_recipes.filter(user=user).exists()
+        return False
+    
+    def get_is_in_shopping_cart(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return obj.shopping_cart_recipes.filter(user=user).exists()
+        return False
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -150,8 +150,8 @@ class RecipeDetailSerializer(serializers.ModelSerializer):
     author = serializers.StringRelatedField()
     tag = TagSerializer(many=True, read_only=True)
     ingredients = IngredientSerializer(many=True, read_only=True)
-    # is_favorite = serializers.SerializerMethodField()
-    # is_in_shopping_list = serializers.SerializerMethodField()
+    is_favorite = serializers.SerializerMethodField()
+    is_in_shopping_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
@@ -166,14 +166,14 @@ class RecipeDetailSerializer(serializers.ModelSerializer):
             'cooking_time',
         )
 
-    # def get_is_favorited(self, obj):
-    #     user = self.context['request'].user
-    #     if user.is_authenticated:
-    #         return obj.favorite_recipes.filter(user=user).exists()
-    #     return False
-    #
-    # def get_is_in_shopping_cart(self, obj):
-    #     user = self.context['request'].user
-    #     if user.is_authenticated:
-    #         return obj.shopping_cart_recipes.filter(user=user).exists()
-    #     return False
+    def get_is_favorited(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return obj.favorite_recipes.filter(user=user).exists()
+        return False
+    
+    def get_is_in_shopping_cart(self, obj):
+        user = self.context['request'].user
+        if user.is_authenticated:
+            return obj.shopping_cart_recipes.filter(user=user).exists()
+        return False
