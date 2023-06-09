@@ -27,3 +27,36 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower',
+        verbose_name='Пользователь',
+        help_text='Пользователь',
+    )
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='following',
+        verbose_name='Избранный автор',
+        help_text='Избранный автор',
+    )
+
+    class Meta:
+        verbose_name = 'Избранный автор'
+        verbose_name_plural = 'Избранные авторы'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'], name='unique_relationships'
+            ),
+            models.CheckConstraint(
+                name='prevent_self_follow',
+                check=~models.Q(user=models.F('author')),
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.user} {self.author}'
