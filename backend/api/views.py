@@ -152,13 +152,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 )
                 for r in ingredients:
                     i = Ingredient.objects.get(pk=r.ingredient.id)
-                    point_name = f'{i.name} ({i.measurement_unit})'
+                    point_name = f'{i.title} ({i.units_of_measurement})'
                     if point_name in shop_cart.keys():
                         shop_cart[point_name] += r.amount
                     else:
                         shop_cart[point_name] = r.amount
 
-            for name, amount in shop_cart.items():
-                f.write(f'* {name} - {amount}\n')
+            for title, amount in shop_cart.items():
+                f.write(f'* {title} - {amount}\n')
 
         return FileResponse(open(file, 'rb'), as_attachment=True)

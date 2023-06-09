@@ -7,23 +7,19 @@ User = get_user_model()
 
 
 class Tag(models.Model):
-    name = models.CharField(
+    title = models.CharField(
         unique=True,
         max_length=20,
         verbose_name='Название',
-        help_text='Название тега',
     )
-    color = ColorField(
+    color_key = ColorField(
         format='hex',
-        default='#FF0000',
-        verbose_name='Цветовой HEX-код',
-        help_text='Цветовой HEX-код',
+        verbose_name='Цветовой код',
     )
     slug = models.SlugField(
         unique=True,
         max_length=20,
-        verbose_name='Slug',
-        help_text='Slug тега',
+        verbose_name='Слаг тега',
     )
 
     class Meta:
@@ -31,21 +27,18 @@ class Tag(models.Model):
         verbose_name_plural = 'Теги'
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Ingredient(models.Model):
-    name = models.CharField(
+    title = models.CharField(
         db_index=True,
         max_length=50,
         verbose_name='Название',
-        help_text='Название ингредиента',
     )
     measurement_unit = models.CharField(
-        default='г',
         max_length=10,
         verbose_name='Единицы измерения',
-        help_text='Единицы измерения',
     )
 
     class Meta:
@@ -53,7 +46,7 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class Recipe(models.Model):
@@ -64,7 +57,7 @@ class Recipe(models.Model):
         verbose_name='Автор публикации',
         help_text='Автор рецепта',
     )
-    name = models.CharField(
+    title = models.CharField(
         max_length=100,
         verbose_name='Название',
         help_text='Название рецепта',
@@ -114,7 +107,7 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class IngredientAmount(models.Model):
