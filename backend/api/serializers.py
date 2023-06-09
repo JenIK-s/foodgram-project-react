@@ -38,7 +38,7 @@ class CustomUserSerializer(UserSerializer):
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ('id', 'title', 'image', 'cooking_time',)
+        fields = ('id', 'name', 'image', 'cooking_time',)
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
@@ -91,13 +91,13 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class IngredientRecipeGetSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='ingredient.id')
-    title = serializers.ReadOnlyField(source='ingredient.title')
-    units_of_measurement = serializers.ReadOnlyField(
-        source='ingredient.units_of_measurement')
+    name = serializers.ReadOnlyField(source='ingredient.name')
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit')
 
     class Meta:
         model = IngredientAmount
-        fields = ('id', 'title', 'amount', 'units_of_measurement',)
+        fields = ('id', 'name', 'amount', 'measurement_unit',)
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -113,7 +113,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'tags', 'author', 'ingredients',
-                  'is_favorited', 'is_in_shopping_cart', 'title',
+                  'is_favorited', 'is_in_shopping_cart', 'name',
                   'image', 'text', 'cooking_time',)
 
     def get_is_favorited(self, obj):

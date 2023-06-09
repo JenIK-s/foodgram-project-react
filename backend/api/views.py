@@ -7,7 +7,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from recipes.models import (FavoriteRecipe, Ingredient, IngredientAmount, Recipe,
+from posts.models import (FavoriteRecipe, Ingredient, IngredientAmount, Recipe,
                           ShoppingCart, Subscription, Tag)
 from users.models import User
 from .filters import IngredientFilter, RecipeFilter
@@ -152,13 +152,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 )
                 for r in ingredients:
                     i = Ingredient.objects.get(pk=r.ingredient.id)
-                    point_name = f'{i.title} ({i.units_of_measurement})'
+                    point_name = f'{i.name} ({i.measurement_unit})'
                     if point_name in shop_cart.keys():
                         shop_cart[point_name] += r.amount
                     else:
                         shop_cart[point_name] = r.amount
 
-            for title, amount in shop_cart.items():
-                f.write(f'* {title} - {amount}\n')
+            for name, amount in shop_cart.items():
+                f.write(f'* {name} - {amount}\n')
 
         return FileResponse(open(file, 'rb'), as_attachment=True)
