@@ -73,7 +73,6 @@ class Recipe(models.Model):
     )
     tags = models.ManyToManyField(
         Tag,
-        on_delete=models.CASCADE,
         verbose_name='Тег',
     )
     cooking_time = models.PositiveSmallIntegerField(
