@@ -7,21 +7,21 @@ from .models import Ingredient, Recipe, Tag
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
-        'name',
+        'title',
         'author',
     )
-    list_filter = ('author', 'name', 'tags',)
+    list_filter = ('author', 'title', 'tags',)
 
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = (
         'pk',
-        'name',
-        'measurement_unit',
+        'title',
+        'units_of_measurement',
     )
-    search_fields = ('name',)
-    list_filter = ('measurement_unit',)
+    search_fields = ('title',)
+    list_filter = ('units_of_measurement',)
 
 
 admin.site.register(Tag)
