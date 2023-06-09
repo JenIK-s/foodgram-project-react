@@ -1,8 +1,8 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from rest_framework import serializers
 
-from recipes.models import (FavoriteRecipe, Ingredient, IngredientAmount, Recipe,
-                          ShoppingCart, Tag)
+from recipes.models import (FavoritesList, Ingredient, IngredientInRecipe, Recipe,
+                          ShoppingList, Tag)
 from users.models import User, Subscription
 from .fields import Base64ImageField, Hex2NameColor
 
@@ -96,7 +96,7 @@ class IngredientRecipeGetSerializer(serializers.ModelSerializer):
         source='ingredient.measurement_unit')
 
     class Meta:
-        model = IngredientAmount
+        model = IngredientInRecipe
         fields = ('id', 'name', 'amount', 'measurement_unit',)
 
 
@@ -119,13 +119,13 @@ class RecipeSerializer(serializers.ModelSerializer):
     def get_is_favorited(self, obj):
         user = self.context['request'].user.id
         recipe = obj.id
-        return FavoriteRecipe.objects.filter(user_id=user,
+        return FavoritesList.objects.filter(user_id=user,
                                              recipe_id=recipe).exists()
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context['request'].user.id
         recipe = obj.id
-        return ShoppingCart.objects.filter(user_id=user,
+        return ShoppingList.objects.filter(user_id=user,
                                            recipe_id=recipe).exists()
 
 
@@ -134,7 +134,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
     amount = serializers.IntegerField(write_only=True)
 
     class Meta:
-        model = IngredientAmount
+        model = IngredientInRecipe
         fields = ('id', 'amount')
 
 
@@ -175,7 +175,7 @@ class RecipePostSerializer(serializers.ModelSerializer):
             recipe.tags.add(tag)
             recipe.save()
         for ingredient in ingredients:
-            IngredientAmount.objects.create(
+            IngredientInRecipe.objects.create(
                 ingredient_id=ingredient.get('id'),
                 amount=ingredient.get('amount'),
                 recipe=recipe

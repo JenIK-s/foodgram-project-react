@@ -7,8 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from recipes.models import (FavoriteRecipe, Ingredient, IngredientAmount, Recipe,
-                          ShoppingCart, Tag)
+from recipes.models import (FavoritesList, Ingredient, IngredientInRecipe, Recipe,
+                          ShoppingList, Tag)
 from users.models import User, Subscription
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import LimitPageNumberPagination
@@ -125,7 +125,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,)
     )
     def favorite(self, request, pk=None):
-        return self.post_del_recipe(request, pk, FavoriteRecipe)
+        return self.post_del_recipe(request, pk, FavoritesList)
 
     @action(
         detail=True,
@@ -133,7 +133,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,)
     )
     def shopping_cart(self, request, pk):
-        return self.post_del_recipe(request, pk, ShoppingCart)
+        return self.post_del_recipe(request, pk, ShoppingList)
 
     @action(
         detail=False,
@@ -142,12 +142,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         user = request.user
-        purchases = ShoppingCart.objects.filter(user=user)
+        purchases = ShoppingList.objects.filter(user=user)
         file = 'shopping-list.txt'
         with open(file, 'w') as f:
             shop_cart = dict()
             for purchase in purchases:
-                ingredients = IngredientAmount.objects.filter(
+                ingredients = IngredientInRecipe.objects.filter(
                     recipe=purchase.recipe.id
                 )
                 for r in ingredients:
