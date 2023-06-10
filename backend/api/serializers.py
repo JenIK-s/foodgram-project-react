@@ -141,7 +141,9 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
 class RecipePostSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     tags = serializers.PrimaryKeyRelatedField(
-        queryset=Tag.objects.all(), many=True)
+        queryset=Tag.objects.all(),
+        many=True
+    )
     ingredients = IngredientAmountSerializer(many=True)
     image = Base64ImageField()
 
@@ -149,26 +151,40 @@ class RecipePostSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = '__all__'
 
-    def validate_ingredients(self, ingredients):
-        if not ingredients:
+    # def validate_ingredients(self, ingredients):
+    #     if not ingredients:
+    #         raise serializers.ValidationError(
+    #             'Необходимо выбрать ингредиенты!')
+    #     for ingredient in ingredients:
+    #         if ingredient['amount'] < 1:
+    #             raise serializers.ValidationError(
+    #                 'Количество не может быть меньше 1!')
+
+    #     ids = [ingredient['id'] for ingredient in ingredients]
+    #     if len(ids) != len(set(ids)):
+    #         raise serializers.ValidationError(
+    #             'Данный ингредиент уже есть в рецепте!')
+    #     return ingredients
+
+    # def validate_tags(self, tags):
+    #     if not tags:
+    #         raise serializers.ValidationError(
+    #             'Необходимо выбрать теги!')
+    #     return tags
+
+    def validate_ingredients_and_tags(self, data):
+        if not data['tags']:
             raise serializers.ValidationError(
-                'Необходимо выбрать ингредиенты!')
-        for ingredient in ingredients:
+                'Выберите хотябы один тег'
+            )
+        if not data['ingredients']:
+            raise serializers.ValidationError(
+                'Выберите хотябы один ингридиент'
+            )
+        for ingredient in data['ingredients']:
             if ingredient['amount'] < 1:
                 raise serializers.ValidationError(
                     'Количество не может быть меньше 1!')
-
-        ids = [ingredient['id'] for ingredient in ingredients]
-        if len(ids) != len(set(ids)):
-            raise serializers.ValidationError(
-                'Данный ингредиент уже есть в рецепте!')
-        return ingredients
-
-    def validate_tags(self, tags):
-        if not tags:
-            raise serializers.ValidationError(
-                'Необходимо выбрать теги!')
-        return tags
 
     def add_ingredients_and_tags(self, tags, ingredients, recipe):
         for tag in tags:
@@ -186,9 +202,9 @@ class RecipePostSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
-        return self.add_ingredients_and_tags(
-            tags, ingredients, recipe
-        )
+        recipe.tags.set(tags)
+        self.write_ingredients(recipe, ingredients)
+        return recipe
 
     def update(self, instance, validated_data):
         instance.ingredients.clear()
