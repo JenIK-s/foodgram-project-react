@@ -5,37 +5,7 @@ from recipes.models import (FavoritesList, Ingredient, IngredientInRecipe, Recip
                           ShoppingList, Tag)
 from users.models import User, Subscription
 from drf_extra_fields.fields import Base64ImageField
-
-
-class CreateUserSerializer(UserCreateSerializer):
-    class Meta:
-        model = User
-        fields = ('email', 'password', 'username', 'first_name', 'last_name',)
-        extra_kwargs = {'password': {'write_only': True}}
-
-
-class CurrentUserSerializer(UserSerializer):
-    is_subscribed = serializers.SerializerMethodField()
-
-    class Meta:
-        model = User
-        fields = (
-            'email',
-            'id',
-            'username',
-            'first_name',
-            'last_name',
-            'is_subscribed',
-        )
-
-    def get_is_subscribed(self, obj):
-        request = self.context.get('request')
-        if request.user.is_authenticated:
-            return Subscription.objects.filter(
-                user=request.user,
-                author=obj
-            ).exists()
-
+from users.serializers import CurrentUserSerializer
 
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -59,11 +29,16 @@ class SubscriptionSerializer(serializers.ModelSerializer):
                   'recipes', 'is_subscribed', 'recipes_count',)
 
     def get_recipes(self, obj):
-        queryset = obj.recipes.all()
-        return SubscribeRecipeSerializer(queryset, many=True).data
+        request = self.context.get('request')
+        recipes_limit = request.GET.get('recipes_limit')
+        recipes = Recipe.objects.filter(author=obj.author)
+        if recipes_limit:
+            recipes = recipes[:int(recipes_limit)]
+        serializer = SubscribeRecipeSerializer(recipes, many=True)
+        return serializer.data
 
     def get_recipes_count(self, obj):
-        return obj.recipes.count()
+        return Recipe.objects.filter(author=obj.author).count()
 
     def get_is_subscribed(self, obj):
         return Subscription.objects.filter(
