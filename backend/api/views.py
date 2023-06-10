@@ -19,7 +19,7 @@ from .serializers import (CustomUserSerializer, IngredientSerializer,
                           TagSerializer)
 
 
-class UsersViewSet(UserViewSet):
+class UserViewSet(UserViewSet):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     search_fields = ('username', 'email')
