@@ -19,55 +19,55 @@ from .serializers import (CustomUserSerializer, IngredientSerializer,
                           TagSerializer)
 
 
-class UserViewSet(UserViewSet):
-    queryset = User.objects.all()
-    serializer_class = CustomUserSerializer
-    search_fields = ('username', 'email')
-    permission_classes = (AllowAny,)
+# class UserViewSet(UserViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = CustomUserSerializer
+#     search_fields = ('username', 'email')
+#     permission_classes = (AllowAny,)
 
-    @action(
-        methods=['GET'],
-        detail=False,
-        permission_classes=(IsAuthenticated,)
-    )
-    def subscriptions(self, request):
-        user = request.user
-        queryset = Subscription.objects.filter(user=user)
-        page = self.paginate_queryset(queryset)
-        serializer = SubscriptionSerializer(
-            page, many=True, context={'request': request}
-        )
-        return self.get_paginated_response(serializer.data)
+#     @action(
+#         methods=['GET'],
+#         detail=False,
+#         permission_classes=(IsAuthenticated,)
+#     )
+#     def subscriptions(self, request):
+#         user = request.user
+#         queryset = Subscription.objects.filter(user=user)
+#         page = self.paginate_queryset(queryset)
+#         serializer = SubscriptionSerializer(
+#             page, many=True, context={'request': request}
+#         )
+#         return self.get_paginated_response(serializer.data)
 
-    @action(
-        methods=['POST', 'DELETE'],
-        detail=True,
-    )
-    def subscribe(self, request, id):
-        author = get_object_or_404(User, id=id)
-        if request.method == 'POST':
-            serializer = SubscriptionSerializer(
-                Subscription.objects.create(user=request.user, author=author),
-                context={'request': request},
-            )
-            return Response(
-                serializer.data, status=status.HTTP_201_CREATED
-            )
-        Subscription.objects.filter(user=request.user, author=author).delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+#     @action(
+#         methods=['POST', 'DELETE'],
+#         detail=True,
+#     )
+#     def subscribe(self, request, id):
+#         author = get_object_or_404(User, id=id)
+#         if request.method == 'POST':
+#             serializer = SubscriptionSerializer(
+#                 Subscription.objects.create(user=request.user, author=author),
+#                 context={'request': request},
+#             )
+#             return Response(
+#                 serializer.data, status=status.HTTP_201_CREATED
+#             )
+#         Subscription.objects.filter(user=request.user, author=author).delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
     pagination_class = None
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [AllowAny]
     pagination_class = None
     filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
     filterset_class = IngredientFilter
