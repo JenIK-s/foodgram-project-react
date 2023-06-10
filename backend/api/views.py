@@ -13,15 +13,15 @@ from users.models import User, Subscription
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import LimitPageNumberPagination
 from .permissions import IsAuthorOrReadOnly
-from .serializers import (CustomUserSerializer, IngredientSerializer,
-                          RecipePostSerializer, RecipeSerializer,
+from .serializers import (CurrentUserSerializer, IngredientSerializer,
+                          RecipeAddSerializer, RecipeSerializer,
                           SubscribeRecipeSerializer, SubscriptionSerializer,
                           TagSerializer)
 
 
 # class UserViewSet(UserViewSet):
 #     queryset = User.objects.all()
-#     serializer_class = CustomUserSerializer
+#     serializer_class = CurrentUserSerializer
 #     search_fields = ('username', 'email')
 #     permission_classes = (AllowAny,)
 
@@ -87,7 +87,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'GET':
             return RecipeSerializer
-        return RecipePostSerializer
+        return RecipeAddSerializer
 
     def post_del_recipe(self, request, pk, database):
         recipe = get_object_or_404(Recipe, id=pk)

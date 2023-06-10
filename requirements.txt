@@ -14,3 +14,4 @@ sqlparse==0.3.1
 django-colorfield==0.7.2
 webcolors==1.11.1
 reportlab==3.6.9
+drf-extra-fields==3.4
