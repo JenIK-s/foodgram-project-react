@@ -48,43 +48,40 @@ class RecipeViewSet(viewsets.ModelViewSet):
             return RecipeSerializer
         return RecipeAddSerializer
 
-    def post_del_recipe(self, request, pk, database):
-        recipe = get_object_or_404(Recipe, id=pk)
+    def operations_shopping_and_favorite_cart(self, request, id, model):
         if request.method == 'POST':
-            if not database.objects.filter(
-                    user=self.request.user,
-                    recipe=recipe).exists():
-                database.objects.create(
-                    user=self.request.user,
-                    recipe=recipe)
-                serializer = SubscribeRecipeSerializer(recipe)
-                return Response(serializer.data,
-                                status=status.HTTP_201_CREATED)
-            text = 'errors: Объект уже в списке.'
-            return Response(text, status=status.HTTP_400_BAD_REQUEST)
+            if model.objects.filter(user=request.user, recipe__id=id):
+                return Response(
+                    {
+                        'error': 'Рецепт уже находится в корзине.'
+                    }
+                )
+            recipe = get_object_or_404(Recipe, id=id)
+            model.objects.create(user=request.user, recipe=recipe)
+            serializer = SubscribeRecipeSerializer(recipe)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         if request.method == 'DELETE':
-            if database.objects.filter(
-                    user=self.request.user,
-                    recipe=recipe).exists():
-                database.objects.filter(
-                    user=self.request.user,
-                    recipe=recipe).delete()
-                return Response(status=status.HTTP_204_NO_CONTENT)
-            text = 'errors: Объект не в списке.'
-            return Response(text, status=status.HTTP_400_BAD_REQUEST)
+            cart = model.objects.filter(user=request.user, recipe__id=id)
+            if not cart.exists():
+                return Response(
+                    {
+                        'error': 'Рецепт уже удалён из корзины.'
+                    },
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            cart.delete()
 
-        else:
-            text = 'errors: Метод обращения недопустим.'
-            return Response(text, status=status.HTTP_400_BAD_REQUEST)
-
+        return Response(status=status.HTTP_204_NO_CONTENT)
+   
     @action(
         detail=True,
         methods=['POST', 'DELETE'],
         permission_classes=(IsAuthenticated,)
     )
     def favorite(self, request, pk=None):
-        return self.post_del_recipe(request, pk, FavoritesList)
+        return self.operations_shopping_and_favorite_cart(request, pk, FavoritesList)
 
     @action(
         detail=True,
@@ -92,7 +89,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,)
     )
     def shopping_cart(self, request, pk):
-        return self.post_del_recipe(request, pk, ShoppingList)
+        return self.operations_shopping_and_favorite_cart(request, pk, ShoppingList)
 
     @action(
         detail=False,
@@ -103,21 +100,22 @@ class RecipeViewSet(viewsets.ModelViewSet):
         user = request.user
         purchases = ShoppingList.objects.filter(user=user)
         file = 'shopping-list.txt'
-        with open(file, 'w') as f:
-            shop_cart = dict()
-            for purchase in purchases:
-                ingredients = IngredientInRecipe.objects.filter(
-                    recipe=purchase.recipe.id
-                )
-                for r in ingredients:
-                    i = Ingredient.objects.get(pk=r.ingredient.id)
-                    point_name = f'{i.name} ({i.measurement_unit})'
-                    if point_name in shop_cart.keys():
-                        shop_cart[point_name] += r.amount
-                    else:
-                        shop_cart[point_name] = r.amount
+        print(purchases)
+        # with open(file, 'w', encoding='utf-8') as f:
+        #     shop_cart = dict()
+        #     for purchase in purchases:
+        #         ingredients = IngredientInRecipe.objects.filter(
+        #             recipe=purchase.recipe.id
+        #         )
+        #         for r in ingredients:
+        #             i = Ingredient.objects.get(pk=r.ingredient.id)
+        #             point_name = f'{i.name} ({i.measurement_unit})'
+        #             if point_name in shop_cart.keys():
+        #                 shop_cart[point_name] += r.amount
+        #             else:
+        #                 shop_cart[point_name] = r.amount
 
-            for name, amount in shop_cart.items():
-                f.write(f'* {name} - {amount}\n')
+        #     for name, amount in shop_cart.items():
+        #         f.write(f'* {name} - {amount}\n')
 
-        return FileResponse(open(file, 'rb'), as_attachment=True)
+        # return FileResponse(open(file, 'rb'), as_attachment=True)
