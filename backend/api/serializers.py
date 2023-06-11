@@ -66,7 +66,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     author = CurrentUserSerializer()
-    image = Base64ImageField()
+    image = Base64ImageField(use_url=False)
     ingredients = IngredientRecipeSerializer(
         many=True,
         read_only=True,
