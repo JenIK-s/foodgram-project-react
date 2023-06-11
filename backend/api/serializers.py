@@ -109,7 +109,7 @@ class RecipeAddSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate_ingredients_and_tags(self, data):
-        if not data['tags']:
+        if not data.get('tags'):
             raise serializers.ValidationError(
                 'Выберите хотябы один тег'
             )
