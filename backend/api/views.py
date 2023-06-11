@@ -23,7 +23,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(author=self.request.user, image=self.request.data.get('image'))
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
