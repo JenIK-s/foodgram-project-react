@@ -87,7 +87,12 @@ jobs:
             echo "y" | docker volume prune
             sudo docker pull jeniks/backend:v1.1.82
             sudo docker pull jeniks/frontend:v1
-            
+            python manage.py makemigrations users
+            python manage.py makemigrations recipes
+            python manage.py makemigrations
+            python manage.py migrate users
+            python manage.py migrate recipes
+            python manage.py migrate
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
