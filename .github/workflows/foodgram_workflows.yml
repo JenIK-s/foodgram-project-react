@@ -81,13 +81,14 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            sudo docker-compose stop
+            echo "y" | docker container prune
+            echo "y" | docker image prune -a
+            echo "y" | docker volume prune
             sudo docker pull jeniks/backend:v1.1.82
             sudo docker pull jeniks/frontend:v1
-            sudo docker-compose stop
-            sudo docker-compose rm backend
-            sudo docker-compose pull backend
-            sudo docker-compose rm frontend
-            sudo docker-compose pull frontend
+            
+            
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
