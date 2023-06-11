@@ -1,20 +1,28 @@
-from django.http import FileResponse
-from django.shortcuts import get_object_or_404
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
+# from django.http import FileResponse
+# from django.shortcuts import get_object_or_404
+# from django_filters.rest_framework import DjangoFilterBackend
+# from rest_framework import status, viewsets
+# from rest_framework.decorators import action
+# from rest_framework.permissions import AllowAny, IsAuthenticated
+# from rest_framework.response import Response
 
-from recipes.models import (FavoritesList, Ingredient, IngredientInRecipe, Recipe,
-                          ShoppingList, Tag)
-from .filters import IngredientFilter, RecipeFilter
-from .pagination import LimitPageNumberPagination
-from .permissions import IsAuthorOrReadOnly
-from .serializers import (IngredientSerializer,
-                          RecipeAddSerializer, RecipeSerializer,
-                          SubscribeRecipeSerializer,
-                          TagSerializer)
+# from recipes.models import (
+#     FavoritesList,
+#     Ingredient,
+#     Recipe,
+#     ShoppingList,
+#     Tag
+# )
+# from .pagination import LimitPageNumberPagination
+# from .permissions import IsAuthorOrReadOnly
+# from .serializers import (
+#     IngredientSerializer,
+#     RecipeAddSerializer,
+#     RecipeSerializer,
+#     SubscribeRecipeSerializer,
+#     TagSerializer
+# )
+from imports import *
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
@@ -28,8 +36,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = [AllowAny]
     pagination_class = None
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter,)
-    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -38,7 +44,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitPageNumberPagination
     filter_backends = (DjangoFilterBackend,)
-    filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
@@ -97,25 +102,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,)
     )
     def download_shopping_cart(self, request):
-        user = request.user
-        purchases = ShoppingList.objects.filter(user=user)
+        purchases = ShoppingList.objects.filter(user=request.user)
         file = 'shopping-list.txt'
-        print(purchases)
-        # with open(file, 'w', encoding='utf-8') as f:
-        #     shop_cart = dict()
-        #     for purchase in purchases:
-        #         ingredients = IngredientInRecipe.objects.filter(
-        #             recipe=purchase.recipe.id
-        #         )
-        #         for r in ingredients:
-        #             i = Ingredient.objects.get(pk=r.ingredient.id)
-        #             point_name = f'{i.name} ({i.measurement_unit})'
-        #             if point_name in shop_cart.keys():
-        #                 shop_cart[point_name] += r.amount
-        #             else:
-        #                 shop_cart[point_name] = r.amount
+        str_list = []
+        with open(file, 'w') as f:
+            for elem in purchases:
+                recipe = elem.recipe
+                result_str = str(
+                    f'Автор рецепта: {recipe.author}\n'
+                    + f'Название рецепта: {recipe.name}\n'
+                    + f'Описание: {recipe.text}\n'
+                )
 
-        #     for name, amount in shop_cart.items():
-        #         f.write(f'* {name} - {amount}\n')
+                f.write(result_str + '\n')
 
-        # return FileResponse(open(file, 'rb'), as_attachment=True)
+        return FileResponse(open(file, 'rb'), as_attachment=True)
