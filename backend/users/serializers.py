@@ -32,3 +32,5 @@ class CurrentUserSerializer(UserSerializer):
                 user=request.user,
                 author=obj
             ).exists()
+        else:
+            return False
