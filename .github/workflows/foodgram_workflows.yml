@@ -88,7 +88,6 @@ jobs:
             sudo docker pull jeniks/backend:v1.1.82
             sudo docker pull jeniks/frontend:v1
             
-            
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env
