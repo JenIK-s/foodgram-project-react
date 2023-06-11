@@ -1,4 +1,18 @@
-from .imports import *
+from djoser.serializers import UserSerializer
+from drf_extra_fields.fields import Base64ImageField
+from rest_framework import serializers
+
+from recipes.models import (
+    FavoritesList,
+    Ingredient,
+    IngredientInRecipe,
+    Recipe,
+    ShoppingList,
+    Tag
+)
+from users.serializers import CurrentUserSerializer
+from users.models import User, Subscription
+
 
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -81,14 +95,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_is_favorited(self, obj):
-        request =  self.context.get('request')
+        request = self.context.get('request')
         return FavoritesList.objects.filter(
             user_id=request.user.id,
             recipe_id=obj.id
         ).exists()
 
     def get_is_in_shopping_cart(self, obj):
-        request =  self.context.get('request')
+        request = self.context.get('request')
         return ShoppingList.objects.filter(
             user_id=request.user.id,
             recipe_id=obj.id
@@ -128,11 +142,11 @@ class RecipeAddSerializer(serializers.ModelSerializer):
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
         for ingredient in ingredients:
-                IngredientInRecipe(
-                    recipe=recipe,
-                    ingredient_id=ingredient.get('id'),
-                    amount=ingredient.get('amount')
-                )
+            IngredientInRecipe(
+                recipe=recipe,
+                ingredient_id=ingredient.get('id'),
+                amount=ingredient.get('amount')
+            )
         return recipe
 
     def update(self, recipe, validated_data):
@@ -143,9 +157,9 @@ class RecipeAddSerializer(serializers.ModelSerializer):
         recipe = super().update(recipe, validated_data)
         recipe.tags.set(tags)
         for ingredient in ingredients:
-                IngredientInRecipe(
-                    recipe=recipe,
-                    ingredient_id=ingredient.get('id'),
-                    amount=ingredient.get('amount')
-                )
+            IngredientInRecipe(
+                recipe=recipe,
+                ingredient_id=ingredient.get('id'),
+                amount=ingredient.get('amount')
+            )
         return recipe

@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 class User(AbstractUser):
     username = models.CharField(
         unique=True,
@@ -24,6 +25,7 @@ class User(AbstractUser):
         default=False,
         verbose_name='Подписка на автора'
     )
+
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
@@ -35,14 +37,12 @@ class Subscription(models.Model):
         on_delete=models.CASCADE,
         related_name='follower',
         verbose_name='Пользователь',
-        help_text='Пользователь',
     )
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='following',
         verbose_name='Избранный автор',
-        help_text='Избранный автор',
     )
 
     class Meta:

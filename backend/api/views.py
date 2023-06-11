@@ -1,4 +1,29 @@
-from .imports import *
+from django.http import FileResponse
+from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+
+from recipes.models import (
+    FavoritesList,
+    Ingredient,
+    Recipe,
+    ShoppingList,
+    Tag
+)
+from .filter import RecipeFilter
+from .pagination import LimitPageNumberPagination
+from .permissions import IsAuthorOrReadOnly
+from .serializers import (
+    IngredientSerializer,
+    RecipeAddSerializer,
+    RecipeSerializer,
+    SubscribeRecipeSerializer,
+    TagSerializer
+)
+
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
@@ -12,7 +37,6 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = [AllowAny]
     pagination_class = None
-    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -24,7 +48,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filterset_class = RecipeFilter
 
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user, image=self.request.data.get('image'))
+        serializer.save(
+            author=self.request.user,
+            image=self.request.data.get('image')
+        )
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -57,14 +84,18 @@ class RecipeViewSet(viewsets.ModelViewSet):
             cart.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
-   
+
     @action(
         detail=True,
         methods=['POST', 'DELETE'],
         permission_classes=(IsAuthenticated,)
     )
     def favorite(self, request, pk=None):
-        return self.operations_shopping_and_favorite_cart(request, pk, FavoritesList)
+        return self.operations_shopping_and_favorite_cart(
+            request,
+            pk,
+            FavoritesList
+        )
 
     @action(
         detail=True,
@@ -72,7 +103,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,)
     )
     def shopping_cart(self, request, pk):
-        return self.operations_shopping_and_favorite_cart(request, pk, ShoppingList)
+        return self.operations_shopping_and_favorite_cart(
+            request,
+            pk,
+            ShoppingList
+        )
 
     @action(
         detail=False,
@@ -82,7 +117,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def download_shopping_cart(self, request):
         purchases = ShoppingList.objects.filter(user=request.user)
         file = 'shopping-list.txt'
-        str_list = []
         with open(file, 'w') as f:
             for elem in purchases:
                 recipe = elem.recipe
@@ -91,7 +125,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     + f'Название рецепта: {recipe.name}\n'
                     + f'Описание: {recipe.text}\n'
                 )
-
                 f.write(result_str + '\n')
 
         return FileResponse(open(file, 'rb'), as_attachment=True)

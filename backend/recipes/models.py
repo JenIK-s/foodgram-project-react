@@ -1,6 +1,5 @@
-from colorfield.fields import ColorField
 from django.contrib.auth import get_user_model
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 
 User = get_user_model()
@@ -102,13 +101,11 @@ class IngredientInRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name='amount_ingredient',
         verbose_name='Рецепт',
     )
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='amount_ingredient',
         verbose_name='Ингредиент',
     )
     amount = models.PositiveSmallIntegerField(
@@ -147,7 +144,6 @@ class FavoritesList(models.Model):
 
     def __str__(self):
         return f'{self.user} {self.recipe}'
-    
 
 
 class ShoppingList(models.Model):
@@ -156,14 +152,12 @@ class ShoppingList(models.Model):
         on_delete=models.CASCADE,
         related_name='shopping_list',
         verbose_name='Пользователь',
-        help_text='Пользователь',
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         related_name='shopping_cart',
         verbose_name='Рецепт в списке покупок',
-        help_text='Рецепт в списке покупок',
     )
 
     class Meta:

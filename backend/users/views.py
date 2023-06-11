@@ -5,10 +5,9 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from users.models import User, Subscription
+from .models import User, Subscription
 from api.serializers import SubscriptionSerializer
 
-from djoser.views import UserViewSet
 
 class UserViewSet(UserViewSet):
     @action(
