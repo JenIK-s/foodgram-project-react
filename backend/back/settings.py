@@ -25,7 +25,7 @@ SECRET_KEY = '+5_1@)1-#35&9z0^hvn)f56es7pertw!6@*@pp9ab_3n*8l%$t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']#['62.84.121.115']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -117,30 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES':
-#     ['rest_framework.authentication.TokenAuthentication', ],
 
-#     'DEFAULT_PERMISSION_CLASSES':
-#     ['rest_framework.permissions.IsAuthenticatedOrReadOnly', ],
-# }
-
-# DJOSER = {
-#     'LOGIN_FIELD': 'email',
-#     'HIDE_USERS': False,
-#     'PERMISSIONS': {
-#         'resipe': ('api.permissions.AuthorStaffOrReadOnly,',),
-#         'recipe_list': ('api.permissions.AuthorStaffOrReadOnly',),
-#         'user': ('api.permissions.OwnerUserOrReadOnly',),
-#         'user_list': ('api.permissions.OwnerUserOrReadOnly',),
-#     },
-#     'SERIALIZERS': {
-#         'user': 'api.serializers.UserSerializer',
-#         'user_list': 'api.serializers.UserSerializer',
-#         'current_user': 'api.serializers.CurrentUserSerializer',
-#         'user_create': 'api.serializers.UserSerializer',
-#     },
-# }
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -191,5 +168,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 AUTH_USER_MODEL = 'users.User'

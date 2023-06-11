@@ -1,28 +1,4 @@
-# from django.http import FileResponse
-# from django.shortcuts import get_object_or_404
-# from django_filters.rest_framework import DjangoFilterBackend
-# from rest_framework import status, viewsets
-# from rest_framework.decorators import action
-# from rest_framework.permissions import AllowAny, IsAuthenticated
-# from rest_framework.response import Response
-
-# from recipes.models import (
-#     FavoritesList,
-#     Ingredient,
-#     Recipe,
-#     ShoppingList,
-#     Tag
-# )
-# from .pagination import LimitPageNumberPagination
-# from .permissions import IsAuthorOrReadOnly
-# from .serializers import (
-#     IngredientSerializer,
-#     RecipeAddSerializer,
-#     RecipeSerializer,
-#     SubscribeRecipeSerializer,
-#     TagSerializer
-# )
-from imports import *
+from .imports import *
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
