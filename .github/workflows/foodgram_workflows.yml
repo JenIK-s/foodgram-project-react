@@ -81,8 +81,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            sudo docker pull jeniks/foodgram:latest
-            sudo docker pull jeniks/foodgram_front:latest
+            sudo docker pull jeniks/backend:latest
+            sudo docker pull jeniks/frontend:latest
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker-compose pull backend
