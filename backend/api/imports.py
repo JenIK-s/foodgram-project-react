@@ -19,7 +19,7 @@ from recipes.models import (
 )
 from users.serializers import CurrentUserSerializer
 from users.models import User, Subscription
-from .filter import RecipeFilter
+from .filter import RecipeFilter, IngredientFilter
 from .pagination import LimitPageNumberPagination
 from .permissions import IsAuthorOrReadOnly
 from .serializers import (
