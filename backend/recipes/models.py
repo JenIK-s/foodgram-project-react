@@ -60,6 +60,7 @@ class Recipe(models.Model):
         related_name='recipes',
     )
     image = models.ImageField(
+        upload_to='media/'
         verbose_name='Картинка',
     )
     text = models.TextField(
