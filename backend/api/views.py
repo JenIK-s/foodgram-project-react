@@ -2,7 +2,11 @@ from django.conf import settings
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
+from rest_framework.status import (
+    HTTP_201_CREATED,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST
+)
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -74,16 +78,16 @@ class RecipeViewSet(ModelViewSet):
 
             return Response(serializer.data, status=HTTP_201_CREATED)
 
-        else:
-            cart = model.objects.filter(user=request.user, recipe__id=id)
-            if not cart.exists():
-                return Response(
-                    {
-                        'error': 'Рецепт уже удалён из корзины.'
-                    },
-                    status=HTTP_400_BAD_REQUEST
-                )
-            cart.delete()
+        
+        cart = model.objects.filter(user=request.user, recipe__id=id)
+        if not cart.exists():
+            return Response(
+                {
+                    'error': 'Рецепт уже удалён из корзины.'
+                },
+                status=HTTP_400_BAD_REQUEST
+            )
+        cart.delete()
 
         return Response(status=HTTP_204_NO_CONTENT)
 
