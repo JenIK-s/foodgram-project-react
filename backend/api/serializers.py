@@ -67,7 +67,7 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
-    id = serializers.ReadOnlyField(source='ingredient.id')
+    id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
         source='ingredient.measurement_unit'
@@ -94,19 +94,21 @@ class RecipeSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = '__all__'
 
-    def get_is_favorited(self, obj):
+    def get_is_favorited_and_shopping_cart(self, obj):
         request = self.context.get('request')
-        return FavoritesList.objects.filter(
+        favorites = FavoritesList.objects.filter(
+            user_id=request.user.id,
+            recipe_id=obj.id
+        ).exists()
+        shopping_cart = ShoppingList.objects.filter(
             user_id=request.user.id,
             recipe_id=obj.id
         ).exists()
 
-    def get_is_in_shopping_cart(self, obj):
-        request = self.context.get('request')
-        return ShoppingList.objects.filter(
-            user_id=request.user.id,
-            recipe_id=obj.id
-        ).exists()
+        return {
+            'is_favorited': favorites,
+            'is_in_shopping_cart': shopping_cart,
+        }
 
 
 class RecipeAddSerializer(serializers.ModelSerializer):
@@ -122,11 +124,13 @@ class RecipeAddSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = '__all__'
 
-    def validate_ingredients_and_tags(self, data):
+    def validate_tags(self, data):
         if not data.get('tags'):
             raise serializers.ValidationError(
                 'Выберите хотябы один тег'
             )
+
+    def validate_ingredients(self, data):
         if not data['ingredients']:
             raise serializers.ValidationError(
                 'Выберите хотябы один ингридиент'

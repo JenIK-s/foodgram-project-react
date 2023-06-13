@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, viewsets
+from rest_framework.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -25,21 +27,21 @@ from .serializers import (
 )
 
 
-class TagViewSet(viewsets.ReadOnlyModelViewSet):
+class TagViewSet(ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = [AllowAny]
     pagination_class = None
 
 
-class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
+class IngredientViewSet(ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = [AllowAny]
     pagination_class = None
 
 
-class RecipeViewSet(viewsets.ModelViewSet):
+class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     permission_classes = (IsAuthorOrReadOnly,)
@@ -70,20 +72,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
             model.objects.create(user=request.user, recipe=recipe)
             serializer = SubscribeRecipeSerializer(recipe)
 
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=HTTP_201_CREATED)
 
-        if request.method == 'DELETE':
+        else:
             cart = model.objects.filter(user=request.user, recipe__id=id)
             if not cart.exists():
                 return Response(
                     {
                         'error': 'Рецепт уже удалён из корзины.'
                     },
-                    status=status.HTTP_400_BAD_REQUEST
+                    status=HTTP_400_BAD_REQUEST
                 )
             cart.delete()
 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=HTTP_204_NO_CONTENT)
 
     @action(
         detail=True,
@@ -116,8 +118,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     )
     def download_shopping_cart(self, request):
         purchases = ShoppingList.objects.filter(user=request.user)
-        file = 'shopping-list.txt'
-        with open(file, 'w') as f:
+        settings.FILE_NAME = 'shopping-list.txt'
+        with open(settings.FILE_NAME, 'w') as f:
             for elem in purchases:
                 recipe = elem.recipe
                 result_str = str(
@@ -127,4 +129,4 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 )
                 f.write(result_str + '\n')
 
-        return FileResponse(open(file, 'rb'), as_attachment=True)
+        return FileResponse(open(settings.FILE_NAME, 'rb'), as_attachment=True)
