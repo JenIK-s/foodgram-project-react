@@ -110,10 +110,10 @@ class RecipeSerializer(serializers.ModelSerializer):
             'is_in_shopping_cart': shopping_cart,
         }
 
-    def get_is_favorited(self, obj): 
+    def get_is_favorited(self, obj):
         self.get_is_favorited_and_shopping_cart(obj)
- 
-    def get_is_in_shopping_cart(self, obj): 
+
+    def get_is_in_shopping_cart(self, obj):
         self.get_is_favorited_and_shopping_cart(obj)
 
 
@@ -148,7 +148,6 @@ class RecipeAddSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
-        
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
@@ -174,5 +173,3 @@ class RecipeAddSerializer(serializers.ModelSerializer):
                 amount=ingredient.get('amount')
             )
         return recipe
-
-

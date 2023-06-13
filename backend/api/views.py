@@ -133,7 +133,6 @@ class RecipeViewSet(ModelViewSet):
                 f.write(result_str + '\n')
 
         return FileResponse(open(settings.FILE_NAME, 'rb'), as_attachment=True)
-    
 
     def download(self, obj):
         FILE_NAME = 'shopping-list.txt'
