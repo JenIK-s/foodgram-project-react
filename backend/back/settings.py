@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '+5_1@)1-#35&9z0^hvn)f56es7pertw!6@*@pp9ab_3n*8l%$t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['158.160.69.44']
 
@@ -168,3 +168,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 
 AUTH_USER_MODEL = 'users.User'
+
+MAX_LENGTH = 150

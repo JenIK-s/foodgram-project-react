@@ -1,24 +1,25 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.conf import settings
 
 
 class User(AbstractUser):
     username = models.CharField(
         unique=True,
-        max_length=150,
+        max_length=settings.MAX_LENGTH,
         verbose_name='Ваш логин'
     )
     email = models.EmailField(
         unique=True,
-        max_length=150,
+        max_length=settings.MAX_LENGTH,
         verbose_name='Ваш email'
     )
     first_name = models.CharField(
-        max_length=150,
+        max_length=settings.MAX_LENGTH,
         verbose_name='Ваше имя'
     )
     last_name = models.CharField(
-        max_length=150,
+        max_length=settings.MAX_LENGTH,
         verbose_name='Ваша фамилия'
     )
     is_subcribed = models.BooleanField(
