@@ -78,7 +78,6 @@ class RecipeViewSet(ModelViewSet):
 
             return Response(serializer.data, status=HTTP_201_CREATED)
 
-        
         cart = model.objects.filter(user=request.user, recipe__id=id)
         if not cart.exists():
             return Response(
