@@ -50,7 +50,7 @@ class Tag(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(
-        max_length=100,
+        max_length=255,
         verbose_name='Название',
     )
     author = models.ForeignKey(
@@ -64,6 +64,7 @@ class Recipe(models.Model):
         verbose_name='Картинка',
     )
     text = models.TextField(
+        max_length=5000,
         verbose_name='Описание',
     )
     ingredients = models.ManyToManyField(

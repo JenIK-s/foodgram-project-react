@@ -80,7 +80,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     author = CurrentUserSerializer()
-    image = Base64ImageField(use_url=False)
+    image = Base64ImageField()
     ingredients = IngredientRecipeSerializer(
         many=True,
         read_only=True,
@@ -110,6 +110,12 @@ class RecipeSerializer(serializers.ModelSerializer):
             'is_in_shopping_cart': shopping_cart,
         }
 
+    def get_is_favorited(self, obj): 
+        self.get_is_favorited_and_shopping_cart(obj)
+ 
+    def get_is_in_shopping_cart(self, obj): 
+        self.get_is_favorited_and_shopping_cart(obj)
+
 
 class RecipeAddSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
@@ -124,24 +130,25 @@ class RecipeAddSerializer(serializers.ModelSerializer):
         model = Recipe
         fields = '__all__'
 
-    def validate_tags(self, data):
-        if not data.get('tags'):
+    def validate_tags(self, tags):
+        if not tags:
             raise serializers.ValidationError(
                 'Выберите хотябы один тег'
             )
 
-    def validate_ingredients(self, data):
-        if not data['ingredients']:
+    def validate_ingredients(self, ingredients):
+        if not ingredients:
             raise serializers.ValidationError(
                 'Выберите хотябы один ингридиент'
             )
-        for ingredient in data['ingredients']:
+        for ingredient in ingredients:
             if ingredient['amount'] < 1:
                 raise serializers.ValidationError(
                     'Количество не может быть меньше 1!')
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
+        
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
@@ -167,3 +174,5 @@ class RecipeAddSerializer(serializers.ModelSerializer):
                 amount=ingredient.get('amount')
             )
         return recipe
+
+
