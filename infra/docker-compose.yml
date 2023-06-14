@@ -11,7 +11,7 @@ services:
       - ./.env
 
   backend:
-    image: jeniks/backend:v1.1.83
+    image: jeniks/backend:v1.1.84
     restart: always
     volumes:
       - static_volume:/app/backend/static/
@@ -20,6 +20,30 @@ services:
      - db
     env_file:
       - ./.env
+
+   backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - static_value:/app/static/
+      - media_value:/app/media/
+      - data_value:/app/data/
+    depends_on:
+      - db
+    command: sh -c "python manage.py fill_my_bd_ingridients && python manage.py fill_my_bd_tags"
+    env_file:
+      - ./.env
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ../frontend/:/app/result_build/
+    depends_on:
+      - backend
 
   frontend:
     image: jeniks/frontend:v1
