@@ -11,7 +11,7 @@ services:
       - ./.env
 
   backend:
-    image: jeniks/backend:v1.1.84
+    image: jeniks/backend:v1.1.85
     restart: always
     volumes:
       - static_volume:/app/backend/static/
@@ -20,15 +20,6 @@ services:
      - db
     env_file:
       - ./.env
-
-  frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
-    volumes:
-      - ../frontend/:/app/result_build/
-    depends_on:
-      - backend
 
   frontend:
     image: jeniks/frontend:v1
