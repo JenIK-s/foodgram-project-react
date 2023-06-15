@@ -123,7 +123,7 @@ class RecipeAddSerializer(serializers.ModelSerializer):
         many=True
     )
     ingredients = IngredientInRecipeSerializer(many=True)
-    image = Base64ImageField()
+    image = Base64ImageField(use_url=False)
 
     class Meta:
         model = Recipe
