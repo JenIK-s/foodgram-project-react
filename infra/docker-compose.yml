@@ -11,7 +11,7 @@ services:
       - ./.env
 
   backend:
-    image: jeniks/backend:v1.1.87
+    image: jeniks/backend:v1.1.88
     restart: always
     volumes:
       - static_volume:/app/backend/static/

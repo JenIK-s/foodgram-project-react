@@ -132,16 +132,16 @@ class RecipeAddSerializer(serializers.ModelSerializer):
     def validate_ingredients(self, ingredients):
         if not ingredients:
             raise serializers.ValidationError(
-                'Необходимо выбрать ингредиенты!')
+                'Вы должны выбрать хотя бы 1 ингредиент!')
         for ingredient in ingredients:
             if ingredient['amount'] < 1:
                 raise serializers.ValidationError(
-                    'Количество не может быть меньше 1!')
+                    'Количество ингредиентов не может быть меньше 1!')
 
-        ids = [ingredient['id'] for ingredient in ingredients]
-        if len(ids) != len(set(ids)):
+        id = [ingredient['id'] for ingredient in ingredients]
+        if len(id) != len(set(id)):
             raise serializers.ValidationError(
-                'Данный ингредиент уже есть в рецепте!')
+                'Такой ингредиент уже есть в рецепте!')
         return ingredients
 
     def validate_tags(self, tags):
