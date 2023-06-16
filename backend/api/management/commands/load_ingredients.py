@@ -11,7 +11,7 @@ class Command(BaseCommand):
             os.path.join(settings.DATA_DIR, 'ingredients.json'), 'r'
         ) as file:
             data = json.load(file)
-            for ingredient in data.items():
+            for ingredient in data:
                 Ingredient.objects.create(
                     name=ingredient["name"],
                     measurement_unit=ingredient["measurement_unit"]
