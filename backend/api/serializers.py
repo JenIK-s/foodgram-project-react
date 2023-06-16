@@ -127,13 +127,12 @@ class RecipeSerializer(serializers.ModelSerializer):
                   'image', 'text', 'cooking_time',)
 
     def get_ingredients(self, obj):
-        ingredients = obj.ingredients.values(
+        return obj.ingredients.values(
             'id',
             'name',
             'measurement_unit',
             amount=F('ingredientinrecipe__amount')
         )
-        return ingredients
 
     def get_recipe_status(self, obj):
         request = self.context.get('request')
