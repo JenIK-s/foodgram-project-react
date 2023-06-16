@@ -6,11 +6,12 @@ from recipes.models import Ingredient
 
 
 class Command(BaseCommand):
-    with open(os.path.join(settings.DATA_ROOT, 'ingredients.json'), 'r') as file:
+    with open(
+        os.path.join(settings.DATA_ROOT, 'ingredients.json'), 'r'
+    ) as file:
         data = json.load(file)
         for ingredient in data.items():
             Ingredient.objects.create(
                 name=ingredient["name"],
-                measurement_unit=ingredient[
-                "measurement_unit"]
+                measurement_unit=ingredient["measurement_unit"]
             )

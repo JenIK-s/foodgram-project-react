@@ -1,14 +1,8 @@
+from django.db.models import F
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-
-
-
 from rest_framework.fields import SerializerMethodField
-from django.db.models import F
-
-
-
 
 from recipes.models import (
     FavoritesList,
@@ -46,6 +40,7 @@ class UserBaseSerializer(serializers.ModelSerializer):
             'last_name',
             'is_subscribed'
         )
+
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
         if request.user.is_authenticated:
@@ -60,8 +55,6 @@ class CurrentUserSerializer(UserBaseSerializer):
 
     class Meta(UserBaseSerializer.Meta):
         fields = UserBaseSerializer.Meta.fields + ('is_subscribed',)
-
-    
 
 
 class SubscriptionSerializer(UserBaseSerializer):
@@ -92,8 +85,6 @@ class SubscriptionSerializer(UserBaseSerializer):
         return Recipe.objects.filter(author=obj.author).count()
 
 
-
-      
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
@@ -121,7 +112,6 @@ class IngredientInRecipeSerializer(serializers.ModelSerializer):
         fields = ('id', 'amount')
 
 
-
 class RecipeSerializer(serializers.ModelSerializer):
     author = CurrentUserSerializer()
     image = Base64ImageField(use_url=False)
@@ -136,7 +126,6 @@ class RecipeSerializer(serializers.ModelSerializer):
                   'is_favorited', 'is_in_shopping_cart', 'name',
                   'image', 'text', 'cooking_time',)
 
-
     def get_ingredients(self, obj):
         ingredients = obj.ingredients.values(
             'id',
@@ -145,7 +134,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             amount=F('ingredientinrecipe__amount')
         )
         return ingredients
-  
+
     def get_recipe_status(self, obj):
         request = self.context.get('request')
         is_favorited = FavoritesList.objects.filter(
