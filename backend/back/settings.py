@@ -9,8 +9,8 @@ DEBUG = os.getenv('DEBUG', default=False)
 ALLOWED_HOSTS = ['158.160.69.44']
 
 INSTALLED_APPS = [
-    'recipes.apps.RecipesConfig',
     'api.apps.ApiConfig',
+    'recipes.apps.RecipesConfig',
     'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
