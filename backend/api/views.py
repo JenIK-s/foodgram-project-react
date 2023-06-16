@@ -2,6 +2,7 @@ from django.conf import settings
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from djoser.views import UserViewSet
 from rest_framework.status import (
     HTTP_201_CREATED,
     HTTP_204_NO_CONTENT,
@@ -26,9 +27,44 @@ from .serializers import (
     IngredientSerializer,
     RecipeAddSerializer,
     RecipeSerializer,
+    SubscriptionSerializer,
     SubscribeRecipeSerializer,
     TagSerializer
 )
+from users.models import User, Subscription
+
+
+class UserViewSet(UserViewSet):
+    @action(
+        methods=['GET'],
+        detail=False,
+        permission_classes=(IsAuthenticated,)
+    )
+    def subscriptions(self, request):
+        user = request.user
+        queryset = Subscription.objects.filter(user=user)
+        page = self.paginate_queryset(queryset)
+        serializer = SubscriptionSerializer(
+            page, many=True, context={'request': request}
+        )
+        return self.get_paginated_response(serializer.data)
+
+    @action(
+        methods=['POST', 'DELETE'],
+        detail=True,
+    )
+    def subscribe(self, request, id):
+        author = get_object_or_404(User, id=id)
+        if request.method == 'POST':
+            serializer = SubscriptionSerializer(
+                Subscription.objects.create(user=request.user, author=author),
+                context={'request': request},
+            )
+            return Response(
+                serializer.data, status=HTTP_201_CREATED
+            )
+        Subscription.objects.filter(user=request.user, author=author).delete()
+        return Response(status=HTTP_204_NO_CONTENT)
 
 
 class TagViewSet(ReadOnlyModelViewSet):
@@ -133,10 +169,3 @@ class RecipeViewSet(ModelViewSet):
                 f.write(result_str + '\n')
 
         return FileResponse(open(settings.FILE_NAME, 'rb'), as_attachment=True)
-
-    def download(self, obj):
-        FILE_NAME = 'shopping-list.txt'
-        with open(FILE_NAME, 'w') as f:
-            f.write(obj + '\n')
-
-        return FileResponse(open(FILE_NAME, 'rb'), as_attachment=True)

@@ -6,13 +6,13 @@ from users.views import UserViewSet
 
 app_name = 'api'
 
-router_3_12_4 = DefaultRouter()
-router_3_12_4.register('tags', TagViewSet)
-router_3_12_4.register('ingredients', IngredientViewSet)
-router_3_12_4.register('recipes', RecipeViewSet)
-router_3_12_4.register('users', UserViewSet)
+router_1 = DefaultRouter()
+router_1.register('tags', TagViewSet)
+router_1.register('ingredients', IngredientViewSet)
+router_1.register('recipes', RecipeViewSet)
+router_1.register('users', UserViewSet)
 
 urlpatterns = [
-    path('', include(router_3_12_4.urls)),
+    path('', include(router_1.urls)),
     path('auth/', include('djoser.urls.authtoken'))
 ]

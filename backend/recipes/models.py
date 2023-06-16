@@ -122,6 +122,7 @@ class IngredientInRecipe(models.Model):
     class Meta:
         verbose_name = 'Кол-во ингредиентов'
         verbose_name_plural = 'Кол-во ингредиентов'
+        unique_together = ('recipe', 'ingredient')
 
     def __str__(self):
         return f'{self.ingredient} {self.recipe}'

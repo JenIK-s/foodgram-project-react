@@ -1,21 +1,12 @@
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY', default='+5_1@)1-#35&9z0^hvn)f56es7pertw!6@*@pp9ab_3n*8l%$t')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', default=False)
 
 ALLOWED_HOSTS = ['158.160.69.44']
-
-# Application definition
 
 INSTALLED_APPS = [
     'recipes.apps.RecipesConfig',
@@ -65,8 +56,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'back.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -86,8 +75,6 @@ DATABASES = {
 # }
 
 
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -125,9 +112,9 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': False,
 
     'SERIALIZERS': {
-        'user_create': 'users.serializers.CreateUserSerializer',
-        'current_user': 'users.serializers.CurrentUserSerializer',
-        'user': 'users.serializers.CurrentUserSerializer',
+        'user_create': 'api.serializers.CreateUserSerializer',
+        'current_user': 'api.serializers.CurrentUserSerializer',
+        'user': 'api.serializers.CurrentUserSerializer',
     },
     'PERMISSIONS': {
         'user': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
@@ -135,9 +122,6 @@ DJOSER = {
         'token_create': ['rest_framework.permissions.AllowAny'],
     },
 }
-
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'ru'
 
@@ -149,9 +133,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
@@ -165,3 +146,4 @@ AUTH_USER_MODEL = 'users.User'
 
 MAX_LENGTH = 150
 FILE_NAME = 'shopping-list.txt'
+DATA_DIR = os.path.join(BASE_DIR, 'data')

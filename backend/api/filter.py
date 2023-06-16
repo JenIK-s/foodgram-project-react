@@ -31,3 +31,19 @@ class RecipeFilter(filters.FilterSet):
             }
             return queryset.filter(**filter_parameters)
         return queryset
+
+    def filter_is_favorited(self, queryset, _, value):
+        return self.filter_is_favorite_or_in_shopping_cart(
+            queryset,
+            _,
+            value,
+            field_name='in_favorite'
+        )
+
+    def filter_is_in_shopping_cart(self, queryset, _, value):
+        return self.filter_is_favorite_or_in_shopping_cart(
+            queryset,
+            _,
+            value,
+            field_name='shopping_cart'
+        )

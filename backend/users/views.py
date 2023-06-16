@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from .models import User, Subscription
+from users.models import User, Subscription
 from api.serializers import SubscriptionSerializer
 from api.views import get_object_or_404
 
