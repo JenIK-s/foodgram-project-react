@@ -30,7 +30,7 @@ class Tag(models.Model):
         max_length=20,
         verbose_name='Название',
     )
-    color_key = ColorField(
+    color = ColorField(
         format='hex',
         verbose_name='Цветовой код',
     )
