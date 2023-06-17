@@ -2,13 +2,15 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.conf import settings
 
+from .validator import validate_no_me
+
 
 class User(AbstractUser):
     username = models.CharField(
         unique=True,
         max_length=settings.MAX_LENGTH,
-        min_length=5,
-        verbose_name='Ваш логин'
+        verbose_name='Ваш логин',
+        validators=[validate_no_me]
     )
     email = models.EmailField(
         unique=True,
