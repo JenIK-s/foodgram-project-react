@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .form import RecipeAdminForm
 from .models import (
     FavoritesList,
     Ingredient,
@@ -13,10 +14,12 @@ from .models import (
 class IngredientInRecipeInline(admin.TabularInline):
     model = IngredientInRecipe
     extra = 1
+    min_num = 1
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
+    form = RecipeAdminForm
     inlines = [IngredientInRecipeInline]
     list_display = (
         'pk',
@@ -24,6 +27,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'author',
     )
     list_filter = ('author', 'name', 'tags',)
+    filter_horizontal = ('ingredients',)
 
 
 @admin.register(Ingredient)
@@ -39,7 +43,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color_key', 'slug',)
+    list_display = ('name', 'color', 'slug',)
 
 
 @admin.register(IngredientInRecipe)
