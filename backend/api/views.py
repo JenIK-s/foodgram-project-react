@@ -17,6 +17,7 @@ from rest_framework import filters
 from recipes.models import (
     FavoritesList,
     Ingredient,
+    IngredientInRecipe,
     Recipe,
     ShoppingList,
     Tag
@@ -168,7 +169,20 @@ class RecipeViewSet(ModelViewSet):
                     f'Автор рецепта: {recipe.author}\n'
                     + f'Название рецепта: {recipe.name}\n'
                     + f'Описание: {recipe.text}\n'
+                    + 'Ингредиенты:\n'
                 )
+                ingredients = IngredientInRecipe.objects.filter(
+                    recipe=recipe.id
+                )
+                for ingredient in ingredients:
+                    ingredient_amount = ingredient.amount
+                    ingredient = Ingredient.objects.get(
+                        pk=ingredient.ingredient.id
+                    )
+                    result_str += str(
+                        f'{ingredient.name} - '
+                        f'{ingredient_amount} '
+                        f'{ingredient.measurement_unit}.\n')
                 f.write(result_str + '\n')
 
         return FileResponse(open(settings.FILE_NAME, 'rb'), as_attachment=True)
