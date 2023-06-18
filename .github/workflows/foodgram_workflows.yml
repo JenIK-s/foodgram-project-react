@@ -45,7 +45,7 @@ jobs:
           uses: docker/build-push-action@v2
           with:
             push: true
-            tags: jeniks/backend:v1.1.99
+            tags: jeniks/backend:v1.1.100
 
   build_and_push_frontend_to_docker_hub:
     name: Push frontend image to Docker Hub
@@ -86,7 +86,7 @@ jobs:
            echo "y" | docker container prune
            echo "y" | docker image prune -a
            echo "y" | docker volume prune
-           sudo docker pull jeniks/backend:v1.1.99
+           sudo docker pull jeniks/backend:v1.1.100
            sudo docker pull jeniks/frontend:v1
            python manage.py makemigrations users
            python manage.py makemigrations recipes

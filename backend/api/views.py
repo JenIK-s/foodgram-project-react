@@ -162,13 +162,16 @@ class RecipeViewSet(ModelViewSet):
     def download_shopping_cart(self, request):
         purchases = ShoppingList.objects.filter(user=request.user)
         settings.FILE_NAME = 'shopping-list.txt'
+        ingredients_dict = {}
+        result_str = ''
+        ingredients_str = ''
         with open(settings.FILE_NAME, 'w') as f:
             for elem in purchases:
                 recipe = elem.recipe
-                result_str = str(
+                result_str += str(
                     f'Автор рецепта: {recipe.author}\n'
                     + f'Название рецепта: {recipe.name}\n'
-                    + f'Описание: {recipe.text}\n'
+                    + f'Описание: {recipe.text}\n\n'
                     + 'Ингредиенты:\n'
                 )
                 ingredients = IngredientInRecipe.objects.filter(
@@ -179,10 +182,19 @@ class RecipeViewSet(ModelViewSet):
                     ingredient = Ingredient.objects.get(
                         pk=ingredient.ingredient.id
                     )
-                    result_str += str(
-                        f'{ingredient.name} - '
-                        f'{ingredient_amount} '
-                        f'{ingredient.measurement_unit}.\n')
-                f.write(result_str + '\n')
+                    if ingredient.name in ingredients_dict.keys():
+                        ingredients_dict[
+                            ingredient.name
+                        ][0] += ingredient_amount
+                    else:
+                        ingredients_dict[ingredient.name] = [
+                            ingredient_amount,
+                            ingredient.measurement_unit
+                        ]
+                print(ingredients_dict)
+            for key, value in ingredients_dict.items():
+                ingredients_str += f'{key} ({value [1]}) - {value[0]}\n'
+            result_str += ingredients_str
+            f.write(result_str + '\n')
 
         return FileResponse(open(settings.FILE_NAME, 'rb'), as_attachment=True)
