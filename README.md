@@ -17,7 +17,7 @@
   - `git clone git@github.com:JenIK-s/foodgram-project-react.git`
 - 2 Создание .env файла с переменными окружения в директории backend/infra
 - 3 Запуск Docker compose
-  - `Из директории backend/infra выполнить команду ####docker-compose up`
+  - Из директории `backend/infra` выполнить команду `docker-compose up`
 - 4 Выполнение миграций
   - `python manage.py makemigrations users`
   - `python manage.py makemigrations recipes`
@@ -26,7 +26,7 @@
   - `python manage.py migrate recipes`
   - `python manage.py migrate`
 - 5 Загрузка ингредиентов
-  - `ИЗ директории backend/ выполнить команду ####python manage.py load_ingredients`
+  - Из директории `backend/` выполнить команду `python manage.py load_ingredients`
 - 6 Создание супер пользователя
 
 ## Информация о проекте
